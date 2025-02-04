@@ -5,4 +5,4 @@
 Developed by : Techie Joe & Saleh Maulut
 
 ---
-(c) Copyright 2025 Techie Joe
+(c) Copyright 2025 -- Techie Joe & Saleh Maulut
