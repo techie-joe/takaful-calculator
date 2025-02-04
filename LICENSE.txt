@@ -1,0 +1,55 @@
+Copyright (c) 2025 - Techie Joe & Saleh Maulut
+
+LICENSE AGREEMENT for Takaful Calculator
+
+This software  and  its content  are  the  exclusive property of the author.
+By using  this  software,  you agree to abide by the terms and conditions of
+this License Agreement.
+
+Users must have  a verifiable direct approval  from  the author  to use  the
+software as a valid licensee.  Owning a copy of this license alone  does not
+imply that permission is granted.
+
+Permission is granted to users to use the content as explicitly permitted by
+the author.   Any attempt to access,  use,  or modify any content other than
+what is permitted, is strictly forbidden.
+
+----------------------------------------------------------------------------
+
+This license can be terminated if you breach any of these conditions.
+
+----------------------------------------------------------------------------
+
+USERS ARE ALLOWED
+  
+  1. To use  the software for creating websites  or  web-applications within
+  the domain owned by the user.
+  
+  2. To modify and customize the content of the template however you like.
+  
+  3. To intergrate, combine or use the template with any other software.
+
+
+USERS ARE NOT ALLOWED
+
+  1. To copy, share or distribute the software to other person in any format
+  without the author's explicit written permission.  Thus,  you cannot sell,
+  resale, rent, lease, license, or sub-license, without author's permission.
+  
+  2. To remove or change attribution links,  backlinks and copyright notices
+  of third-party contents present within the software.
+
+----------------------------------------------------------------------------
+
+This license and  the above copyright notice shall be included in all copies
+or substantial portions of the software.
+
+----------------------------------------------------------------------------
+
+THE SOFTWARE IS PROVIDED  "AS IS",  WITHOUT  WARRANTY  OF ANY  KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO  THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS  BE LIABLE  FOR  ANY CLAIM,  DAMAGES  OR  OTHER
+LIABILITY,  WHETHER IN AN ACTION  OF  CONTRACT, TORT  OR  OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.
