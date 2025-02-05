@@ -1,2 +1,11 @@
 #_html       { background:#cce }
 ._dark#_html { background:#223 }
+
+.nav-button { min-width: 10rem; }
+._nav_layout,
+._header_layout,
+._footer_layout,
+._main_layout,
+._page_layout { max-width:60rem }
+#_heading { padding-top:1em }
+#_about { margin-top:-1em }
