@@ -9,3 +9,15 @@
 ._page_layout { max-width:60rem }
 #_heading { padding-top:1em }
 #_about { margin-top:-1em }
+
+#c-display {
+  max-width: 30em;
+  min-height: 20em;
+  position: relative;
+}
+
+#c-close {
+  position: absolute;
+  top:1rem;
+  right:1rem;
+}

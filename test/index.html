@@ -28,57 +28,64 @@
           <div class="_header_layout">
             <h1 class="_h1" id="_heading">
               <a href="/takaful-calculator" class="__a _hover-link">Takaful Calculator</a>
-              <span class="_lh-1"> / Test</span>
+              <span class="_lh-1 _tc_blue"> / Test</span>
             </h1>
             <p class="_small" id="_about">A stylish calculator for a takaful website</p>
             <hr/>
           </div>
         </header>
-        <div class="_page_layout" id="_pageData">
-          <div class="_mono _small _b">
-            <a title="Back to previous page" class="_nav-item" onclick="event.preventDefault();window.history.back();">← Back</a>
-            <a title="Change theme" class="_nav-item _nav-icon" onclick="event.preventDefault();base.theme.change();">☀</a>
-            <a href="/takaful-calculator" title="Go to home page" class="_nav-item">Home</a>
-            <!-- <a href=".." title="Parent directory" class="_nav-item">Parent</a> -->
-            <a href="/takaful-calculator/test" class="_nav-item">Test</a>
-            <a href="http://localhost/takaful-calculator/test" title="View on Localhost" class="_nav-item">Local</a>
-            <a href="https://techie-joe.github.io/takaful-calculator/test" title="View live on GitHub" class="_nav-item">Live</a>
-            <a href="https://github.com/techie-joe/takaful-calculator/tree/main/test" title="View source on GitHub" target="tc-github-source" class="_nav-item">View Source</a>
-          </div>
-          <hr/>
-          <div class="_p _pre _b">
-            <span id="jstest" class="_tc_red">[JavaScript KO]</span>
-            <script>
-              (function(d){
-                var e = d.getElementById('jstest');
-                e.innerHTML='[JavaScript OK]';
-                e.setAttribute('class','_tc_green');
-              })(document);
-            </script>
-            <span id="host_test">[Local]</span>
-            <script>
-              (function(w,d){
-                var e = d.getElementById('host_test');
-                if ( w.location.hostname != 'localhost' ){
-                  e.innerHTML='[Live]';
-                  e.setAttribute('class','_tc_orange');
-                }
-              })(window,document);
-            </script>
-          </div>
-          <hr/>
-          <div class="_mono _small _b _p">
-            <a href="/takaful-calculator/404.html" class="_nav-item">404</a>
-            <a href="404" title="Simulate Real 404" class="_nav-item _nav-icon">--</a>
-          </div>
-          <hr/>
-          <div class="_pre _b">
-            <div class="_p">
-              <p>Coming soon ...</p>
-              <p>></p>
+        <div class="_page_layout">
+          <div class="_flex _gap">
+            <div class="_f-2-1">
+              <div id="_pageData">
+                <div class="_mono _small _b">
+                  <a href="/takaful-calculator" title="Go to home page" class="_nav-item">Home</a>
+                  <a href="/takaful-calculator/joe" class="_nav-item">Joe</a>
+                  <a href="/takaful-calculator/saleh" class="_nav-item">Saleh</a>
+                  <a href="/takaful-calculator/test" class="_nav-item">Test</a>
+                </div>
+                <hr/>
+                <div class="_pre _b _p">
+                  <a title="Back to previous page" class="_nav-item" onclick="event.preventDefault();window.history.back();">← Back</a>
+                  <!-- <a href=".." title="Parent directory" class="_nav-item">Parent</a> -->
+                  <a title="Change theme" class="_nav-item _nav-icon" onclick="event.preventDefault();base.theme.change();">☀</a>
+                  <a href="http://localhost/takaful-calculator/test" title="View on Localhost" class="_nav-item">Local</a>
+                  <a href="https://techie-joe.github.io/takaful-calculator/test" title="View live on GitHub" class="_nav-item">Live</a>
+                  <a href="https://github.com/techie-joe/takaful-calculator/tree/main/test" title="View source on GitHub" target="tc-github-source" class="_nav-item">View Source</a>
+                </div>
+                <hr/>
+                <div class="_p _pre _b">
+                  <span id="jstest" class="_tc_red">[JavaScript KO]</span>
+                  <script>
+                    (function(d){
+                      var e = d.getElementById('jstest');
+                      e.innerHTML='[JavaScript OK]';
+                      e.setAttribute('class','_tc_green');
+                    })(document);
+                  </script>
+                  <span id="host_test">[Local]</span>
+                  <script>
+                    (function(w,d){
+                      var e = d.getElementById('host_test');
+                      if ( w.location.hostname != 'localhost' ){
+                        e.innerHTML='[Live]';
+                        e.setAttribute('class','_tc_orange');
+                      }
+                    })(window,document);
+                  </script>
+                </div>
+              </div>
+              <hr/>
             </div>
-            <hr/>
+            <div class="_f-2-1">
+              <div>
+                <div id="calculator"></div>
+                <script src="https://unpkg.com/mithril/mithril.js"></script>
+                <script type="text/javascript" src="./calculator.js?v=0.1.0&b=1.0" defer="defer"></script>
+              </div>
+            </div>
           </div>
+          <hr/>
         </div>
         <footer id="_footer">
           <div class="_footer_layout">
