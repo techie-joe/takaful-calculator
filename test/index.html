@@ -17,12 +17,6 @@
   <link rel="stylesheet" media="all" href="/takaful-calculator/assets/css/ace.css?v=0.1.12&b=164.16"/>
   <link rel="stylesheet" media="all" href="/takaful-calculator/assets/css/style.css?v=0.1.12&b=164.16"/>
   <style>
-    .nav-button { min-width: 10rem; }
-    ._nav_layout,
-    ._header_layout,
-    ._footer_layout,
-    ._main_layout,
-    ._page_layout { max-width:60rem }
   </style>
 </head>
 
@@ -32,21 +26,24 @@
       <div class="_view_layout">
         <header id="_header">
           <div class="_header_layout">
-            <h1 class="_h1" id="_heading"><a href="/takaful-calculator" class="__a _hover-link">Takaful Calculator / Test</a></h1>
-            <p class="_small">A stylish calculator for a takaful website</p>
-            <hr class="_no-margin"/>
+            <h1 class="_h1" id="_heading">
+              <a href="/takaful-calculator" class="__a _hover-link">Takaful Calculator</a>
+              <span class="_lh-1"> / Test</span>
+            </h1>
+            <p class="_small" id="_about">A stylish calculator for a takaful website</p>
+            <hr/>
           </div>
         </header>
         <div class="_page_layout" id="_pageData">
-          <div class="_p _pre _b">
+          <div class="_mono _small _b">
             <a title="Back to previous page" class="_nav-item" onclick="event.preventDefault();window.history.back();">← Back</a>
             <a title="Change theme" class="_nav-item _nav-icon" onclick="event.preventDefault();base.theme.change();">☀</a>
             <a href="/takaful-calculator" title="Go to home page" class="_nav-item">Home</a>
             <!-- <a href=".." title="Parent directory" class="_nav-item">Parent</a> -->
             <a href="/takaful-calculator/test" class="_nav-item">Test</a>
+            <a href="//localhost/takaful-calculator/test" title="View on Localhost" class="_nav-item">Local</a>
             <a href="https://techie-joe.github.io/takaful-calculator/test" title="View live on GitHub" class="_nav-item">Live</a>
-            <a href="https://github.com/techie-joe/takaful-calculator" title="View source on GitHub" class="_nav-item">View Source</a>
-            <a href="404" class="_nav-item">404</a>
+            <a href="https://github.com/techie-joe/takaful-calculator/tree/main/test" title="View source on GitHub" target="tc-github-source" class="_nav-item">View Source</a>
           </div>
           <hr/>
           <div class="_p _pre _b">
@@ -68,6 +65,11 @@
                 }
               })(window,document);
             </script>
+          </div>
+          <hr/>
+          <div class="_mono _small _b _p">
+            <a href="/takaful-calculator/404.html" class="_nav-item">404</a>
+            <a href="404" title="Simulate Real 404" class="_nav-item _nav-icon">--</a>
           </div>
           <hr/>
           <div class="_pre _b">
