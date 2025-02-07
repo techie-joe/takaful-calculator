@@ -10,8 +10,8 @@
 #_heading { padding-top:1em }
 #_about { margin-top:-1em }
 
-#c-display {
-  max-width: 30em;
+.c-display {
+  min-width: 8em;
   min-height: 20em;
   position: relative;
 }
@@ -20,4 +20,37 @@
   position: absolute;
   top:1rem;
   right:1rem;
+}
+
+.c-display {
+  color: #222;
+  background-color: #ddd;
+  border: 1px solid #aaa;
+}
+
+._dark .c-display {
+  color: #ddd;
+  background-color: #222;
+  border-color: #111;
+}
+
+/* =================================================== */
+
+input[type="range"] {
+  width: 100%;
+  height: 5px;
+  margin: auto;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+}
+
+.slider_display {
+  text-align: center;
+  display: block;
+  margin: auto;
+  padding: 10px 0 0 0; 
+  width: 100%;
 }
