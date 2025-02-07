@@ -8,6 +8,7 @@
 - create a `404` error handler.
 - create `index.html` files for root and test. and build propper navigation.
 - create initial takaful calculator `calculator.js` using mithril.
+- add sliders and clickers.
 
 ### To do list
 - ...
