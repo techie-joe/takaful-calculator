@@ -35,7 +35,7 @@ input[type="number"]{
   display: inline-block;
   vertical-align: middle;
   width: 100%;
-  max-width: 30em;
+  max-width: 32.7rem;
 }
 
 .c-count button,
