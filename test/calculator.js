@@ -2,6 +2,7 @@
   w, d, c
 ) {
   var
+    save = {},
     err = function (err) { return c.error(`Calculator Error: ${err}`) },
     log = c.log,
     xxx = undefined;
@@ -74,12 +75,14 @@
           m('td.c-count-value', m('input.c-input', {
             type: 'number', value: val,
             oncreate: function (_vnode) {
-              _vnode.dom.addEventListener('change', function (e) {
+              function updateInput(e) {
                 let v = _vnode.dom.value;
                 v = isNaN(v) ? val : Number(v);
                 val = v < min ? min : v > max ? max : v;
                 m.redraw();
-              });
+              }
+              _vnode.dom.addEventListener('change', updateInput);
+              _vnode.dom.addEventListener('keyup', updateInput);
             },
           })),
           m('td', m('button', { onclick: decrement }, '-')),
@@ -116,12 +119,14 @@
           m('td.c-count-value', m('input.c-input', {
             type: 'number', min: min, max: max, value: val,
             oncreate: function (_vnode) {
-              _vnode.dom.addEventListener('change', function (e) {
+              function updateInput(e) {
                 let v = _vnode.dom.value;
                 v = isNaN(v) ? val : Number(v);
                 val = v < min ? min : v > max ? max : v;
                 m.redraw();
-              });
+              }
+              _vnode.dom.addEventListener('change', updateInput);
+              _vnode.dom.addEventListener('keyup', updateInput);
             },
           })),
           m('td', m('button', { onclick: decrement }, '-')),
@@ -133,43 +138,49 @@
 
   function Calculator(initial_vnode) {
 
-    var testVal = 100;
-    var countVal = 100;
-    var gliderVal = 20;
-    var sliderVal = 10;
-    var slidexVal = 90;
-  
+    var _glider = 20;
+    var _slider = 10;
+    var _slidex = 90;
+    var _count = 100;
+    var _test = 100;
+
     return {
+
       view: function () {
         return [
           m('div.c-display._pa._radius-x25r', [
             m('a.c-close._btnlink._small._no-pad._lh-0', { href: '#!/hello', title: 'Close Calculator' }, itext('×')),
             m('h3._h6._no-margin', 'Takaful Calculator'), m('hr'),
-            m(Glider, { id: 'glider', min: 0, max: 100, value: gliderVal }),
-            m('div', [
+            m('div.i_row', m(Glider, { id: 'glider', min: 0, max: 100, value: _glider })),
+            m('div.i_row', [
               m('span.c-row-label', 'Slider'),
-              m(Slider, { id: 'slider', min: 0, max: 100, value: sliderVal }),
+              m(Slider, { id: 'slider', min: 0, max: 100, value: _slider }),
             ]),
-            m('div', [
+            m('div.i_row', [
               m('span.c-row-label', 'Slidex'),
-              m(Slider, { id: 'slidex', min: 0, max: 100, value: slidexVal }),
+              m(Slider, { id: 'slidex', min: 0, max: 100, value: _slidex }),
             ]),
-            m('div', [
+            m('div.i_row', [
               m('span.c-row-label', 'Count'),
-              m(Count, { id:'count', min: 0, max: 200, value: countVal }),
+              m(Count, { id: 'count', min: 0, max: 200, value: _count }),
             ]),
-            m('div', [
+            m('div.i_row', [
               m('span.c-row-label', 'Test'),
-              m('table.c-count._inline-block', {id:'test'}, m('tr', [
-                m('td.c-count-value', testVal),
+              m('table.c-count._inline-block', { id: 'test' }, m('tr', [
+                m('td.c-count-value', _test),
                 m('input', {
-                  type: 'number', min: 0, max: 99999, value: testVal,
+                  type: 'number', min: 0, max: 99999, value: _test,
                   oncreate: function (_vnode) {
-                    _vnode.dom.addEventListener('change', function (e) {
+                    var min = 0;
+                    var max = 99999;
+                    function updateInput(e) {
                       let v = _vnode.dom.value;
-                      testVal = isNaN(v) ? v : Number(v);
+                      v = isNaN(v) ? v : Number(v);
+                      _test = v < min ? min : v > max ? max : v;
                       m.redraw();
-                    });
+                    }
+                    _vnode.dom.addEventListener('change', updateInput);
+                    _vnode.dom.addEventListener('keyup', updateInput);
                   },
                 }),
               ])),

@@ -76,6 +76,10 @@ input[type="number"]{
   margin: .1em -.2em 0;
 }
 
+#count .c-input {
+  width: 5.5em;
+}
+
 .c-absolute {
   position: absolute;
   width: 30em;
@@ -131,6 +135,8 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .c-slider-display {
+  font-size:.9em;
+  line-height: 1;
   text-align: center;
   display: block;
   margin: auto;
@@ -138,3 +144,5 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 #slidex .c-slider-input { rotate:180deg; }
+
+.i_row { margin:.5rem 0; }
