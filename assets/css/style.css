@@ -10,13 +10,61 @@
 #_heading { padding-top:1em }
 #_about { margin-top:-1em }
 
+.c-row-label {
+  min-width: 5em;
+  display: inline-block;
+  vertical-align: middle;
+  min-height: 1.6em;
+}
+
+.c-count,
+.c-slider {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.c-count button,
+.c-slider button {
+  min-width: 1.5em;
+  min-height: 1.5em;
+  font-size: 0.9rem;
+  font-weight: bold;
+  font-family: monospace;
+  line-height: 1.2;
+  border-radius: 1em;
+  border-width: 0;
+  cursor: pointer;
+}
+
+.c-count-value,
+.c-slider-value {
+  font-size: .9em;
+  min-width: 3em;
+}
+
+.c-absolute {
+  position: absolute;
+  width: 30em;
+  top: 1rem;
+  right: 2em;  
+}
+
+.c-relative { position: relative; }
+
+@media (min-width: 550px) {
+  .c-relative { top: -7rem; }
+}
+@media (min-width: 1050px) {
+  .c-relative { right: -2rem; }
+}
+
 .c-display {
   min-width: 8em;
   min-height: 20em;
   position: relative;
 }
 
-#c-close {
+.c-close {
   position: absolute;
   top:1rem;
   right:1rem;
@@ -45,6 +93,7 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-thumb {
   width: 14px;
   height: 14px;
+  cursor: pointer;
 }
 
 .slider_display {

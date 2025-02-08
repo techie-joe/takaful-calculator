@@ -28,7 +28,7 @@
           <div class="_header_layout">
             <h1 class="_h1" id="_heading">
               <a href="/takaful-calculator" class="__a _hover-link">Takaful Calculator</a>
-              <span class="_lh-1 _tc_blue"> / Test</span>
+              <span class="_lh-1 _tc_blue _no-wrap"> / Test</span>
             </h1>
             <p class="_small" id="_about">A stylish calculator for a takaful website</p>
             <hr/>
@@ -77,12 +77,13 @@
               </div>
               <hr/>
             </div>
-            <div class="_fill" class="calculator">
+            <div class="_f-3-2">
 
-              <div id="calculator"></div>
-              <script src="https://unpkg.com/mithril/mithril.js"></script>
-              <script type="text/javascript" src="./calculator.js?v=0.1.0&b=1.0" defer="defer"></script>
-
+              <div id="calculator" class="calculator c-relative"><div class="c-display _pa _radius-x25r _mono _small" style='color:#888'>Loading ...</div></div>
+              <!-- <script src="https://unpkg.com/mithril/mithril.js"></script> -->
+              <script type="text/javascript" src="/takaful-calculator/assets/cjs/mithril.js?v=0.1.12&b=164.16" defer="defer"></script>
+              <script type="text/javascript" src="calculator.js?v=0.1.0&b=1.0" defer="defer"></script>
+              <script>var load_calculator_to='calculator';</script>
             </div>
           </div>
           <hr/>
