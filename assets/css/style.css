@@ -21,6 +21,7 @@
 .c-slider {
   display: inline-block;
   vertical-align: middle;
+  width: 30em;
 }
 
 .c-count button,
@@ -116,10 +117,9 @@ input[type="range"]::-webkit-slider-thumb {
   cursor: pointer;
 }
 
-.slider_display {
+.c-slider-display {
   text-align: center;
   display: block;
   margin: auto;
-  padding: 10px 0 0 0; 
   width: 100%;
 }

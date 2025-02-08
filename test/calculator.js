@@ -43,9 +43,9 @@
       var _max = vnode.attrs.max;
       var _value = vnode.attrs.value;
       var _onchange = vnode.attrs.onchange;
-      var output = m('div', { id: _id + '_display', title: _id, class: 'slider_display' }, `${_value}`);
-      var input = m('input', {
-        type: 'range', title: _id, class: 'slider_input', id: _id, min: _min, max: _max, value: _value,
+      var output = m('div.c-slider-display', { id: _id + '_display', title: _id }, `${_value}`);
+      var input = m('input.c-slider-input', {
+        type: 'range', title: _id, id: _id, min: _min, max: _max, value: _value,
         onchange: function (e) {
           sliderValue = input.dom.value;
         },
@@ -55,7 +55,7 @@
           });
         },
       });
-      return m('div', { class: 'slider' }, [input, output])
+      return m('div._p.c-full-slider', [output,input])
     }
   }
 
@@ -129,6 +129,19 @@
           })),
           m('td', m('button', { onclick: decrement }, '-')),
           m('td', m('button', { onclick: increment }, '+')),
+          m('td', { style: 'width:100%' }, m('input', {
+            type: 'range',
+            class: 'c-slider-input',
+            title: initial_vnode.attrs.title,
+            min: min, max: max, value: val,
+            onchange: function (e) { sliderValue = e.target.value; },
+            oncreate: function (_vnode) {
+              _vnode.dom.addEventListener('input', function (e) {
+                val = e.target.value;
+                m.redraw();
+              });
+            },
+          }))
         ]))
       }
     }
@@ -175,7 +188,7 @@
           m(SliderX, { id: 'sliderValueX', min: 0, max: 100, value: sliderValue }),
           m('div', [
             m('span.c-row-label', 'Slider'),
-            m(Slider, { id: 'sliderValue', min: 0, max: 20, value: sliderVal }),
+            m(Slider, { id: 'sliderValue', min: 0, max: 100, value: sliderVal }),
           ]),
           m('div', [
             m('span.c-row-label', 'Count'),
