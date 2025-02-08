@@ -26,8 +26,9 @@ input[type="number"]{
   min-width: 5em;
   display: inline-block;
   vertical-align: middle;
-  min-height: 1.6em;
-}
+  font-size: .9em;
+  min-height: 1.76em;
+  padding-top: 0.2em;}
 
 .c-count,
 .c-slider {
