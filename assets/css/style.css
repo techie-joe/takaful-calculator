@@ -42,6 +42,26 @@
   min-width: 3em;
 }
 
+.c-count-value input[type=number].c-input::-webkit-outer-spin-button,
+.c-count-value input[type=number].c-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.c-count-value input[type=number].c-input {
+  -moz-appearance: textfield;
+}
+
+.c-count-value .c-input {
+  background:none;
+  border:none;
+  color: inherit;
+  font-size: 1em;
+  padding: 0 .2em;
+  font-family: inherit;
+  display: inline-block;
+  width: 3em;
+  margin: .1em -.2em 0;
+}
+
 .c-absolute {
   position: absolute;
   width: 30em;

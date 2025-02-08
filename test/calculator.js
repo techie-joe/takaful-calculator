@@ -3,7 +3,8 @@
 ) {
   var
     err = function (err) { return c.error(`Calculator Error: ${err}`) },
-    log = c.log;
+    log = c.log,
+    _ = undefined;
 
   var Example = {
 
@@ -80,23 +81,52 @@
     return m('i._itext', m('i.itext', opt, content));
   }
 
+  function inRange(val, min, max) {
+    if (max < min) {
+      let _min = min;
+      min = max;
+      max = _min;
+    }
+    if (val) {
+      if (min) { val = val < min ? min : val; }
+      if (max) { val = val > max ? max : val; }
+    } else {
+      val = min ? min : max ? max : val;
+    }
+    // log(min, max, val)
+    return { val, min, max }
+  }
+
+  // ===========================================================
+
   var countVal = 10;
   var sliderVal = 10;
 
   function Slider(initial_vnode) {
-    var min = initial_vnode.attrs.min || 0;
-    var icount = initial_vnode.attrs.value || min;
-    var count = (icount < min) ? min : icount;
-    function increment() { count += 1; }
-    function decrement() {
-      // count -= 1;
-      count = (count > min) ? count - 1 : min;
-    }
+
+    var { val, min, max } = inRange(
+      initial_vnode.attrs.value,
+      initial_vnode.attrs.min,
+      initial_vnode.attrs.max,
+    );
+
+    function increment() { (val < max) ? (val += 1) : (val = max); val = val < min ? min : val; }
+    function decrement() { (val > min) ? (val -= 1) : (val = min); val = val > max ? max : val; }
 
     return {
       view: function (vnode) {
         return m('table.c-slider', m('tr', [
-          m('td.c-slider-value', count),
+          // m('td.c-slider-value', val),
+          m('td.c-count-value', m('input.c-input', {
+            type: 'number', value: val,
+            oncreate: function (_vnode) {
+              _vnode.dom.addEventListener('change', function (e) {
+                val = Number(_vnode.dom.value) || val;
+                val = val < min ? min : val > max ? max : val;
+                m.redraw();
+              });
+            },
+          })),
           m('td', m('button', { onclick: decrement }, '-')),
           m('td', m('button', { onclick: increment }, '+')),
         ]))
@@ -105,19 +135,30 @@
   }
 
   function Count(initial_vnode) {
-    var min = initial_vnode.attrs.min || 0;
-    var icount = initial_vnode.attrs.value || min;
-    var count = (icount < min) ? min : icount;
-    function increment() { count += 1; }
-    function decrement() {
-      // count -= 1;
-      count = (count > min) ? count - 1 : min;
-    }
+
+    var { val, min, max } = inRange(
+      initial_vnode.attrs.value,
+      initial_vnode.attrs.min,
+      initial_vnode.attrs.max,
+    );
+
+    function increment() { (val < max) ? (val += 1) : (val = max); val = val < min ? min : val; }
+    function decrement() { (val > min) ? (val -= 1) : (val = min); val = val > max ? max : val; }
 
     return {
       view: function (vnode) {
         return m('table.c-count._inline-block', m('tr', [
-          m('td.c-count-value', count),
+          // m('td.c-count-value', val),
+          m('td.c-count-value', m('input.c-input', {
+            type: 'number', value: val,
+            oncreate: function (_vnode) {
+              _vnode.dom.addEventListener('change', function (e) {
+                val = Number(_vnode.dom.value) || val;
+                val = val < min ? min : val > max ? max : val;
+                m.redraw();
+              });
+            },
+          })),
           m('td', m('button', { onclick: decrement }, '-')),
           m('td', m('button', { onclick: increment }, '+')),
         ]));
@@ -134,11 +175,11 @@
           m(SliderX, { id: 'sliderValueX', min: 0, max: 100, value: sliderValue }),
           m('div', [
             m('span.c-row-label', 'Slider'),
-            m(Slider, { id: 'sliderValue', min: 0, max: 100, value: sliderVal }),
+            m(Slider, { id: 'sliderValue', min: 0, max: 20, value: sliderVal }),
           ]),
           m('div', [
             m('span.c-row-label', 'Count'),
-            m(Count, { min: 0, value: countVal }),
+            m(Count, { min: 0, max: 20, value: countVal }),
           ]),
           m('hr'),
           blink({ href: '#!/hello' }, 'Close'), ' ',
