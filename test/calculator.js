@@ -6,6 +6,8 @@
     log = c.log,
     xxx = undefined;
 
+  // ===========================================================
+
   function blink(opt, content) {
     return m('a._btnlink._smaller', opt, content);
   }
@@ -14,7 +16,11 @@
     return m('i._itext', m('i.itext', opt, content));
   }
 
-  function inRange(val, min, max) {
+  function inRange(vnode) {
+    var val = vnode.attrs.value;
+    var min = vnode.attrs.min;
+    var max = vnode.attrs.max;
+
     if (max < min) {
       let _min = min;
       min = max;
@@ -26,38 +32,44 @@
     } else {
       val = min ? min : max ? max : val;
     }
+
     // log(min, max, val)
     return { val, min, max }
   }
 
-  var SliderX = {
-    view: function (vnode) {
-      var _id = vnode.attrs.id;
-      var _min = vnode.attrs.min;
-      var _max = vnode.attrs.max;
-      var _value = vnode.attrs.value;
-      var output = m('div.c-slider-display', { id: _id + '_display', title: _id }, `${_value}`);
-      var input = m('input.c-slider-input', { type: 'range', title: _id, id: _id, min: _min, max: _max, value: _value, });
-      return m('div._p.c-full-slider', [output, input])
+  // ===========================================================
+
+  function Glider(initial_vnode) {
+    var min = initial_vnode.attrs.min;
+    var max = initial_vnode.attrs.max;
+    var val = initial_vnode.attrs.value;
+    return {
+      view: function (vnode) {
+        var output = m('div.c-slider-display', `${val}`);
+        var input = m('input.c-slider-input', {
+          type: 'range', min: min, max: max, value: val,
+          oncreate: function (_vnode) {
+            _vnode.dom.addEventListener('input', function (e) {
+              val = Number(e.target.value);
+              m.redraw();
+            });
+          },
+        });
+        return m('div._p.c-full-slider', [output, input])
+      }
     }
   }
 
-  // ===========================================================
-
   function Slider(initial_vnode) {
 
-    var { val, min, max } = inRange(
-      initial_vnode.attrs.value,
-      initial_vnode.attrs.min,
-      initial_vnode.attrs.max,
-    );
+    var { val, min, max } = inRange(initial_vnode);
 
     function decrement() { val = (val > min) ? (val - 1) : min; val = val > max ? max : val; }
     function increment() { val = (val < max) ? (val + 1) : max; val = val < min ? min : val; }
 
     return {
       view: function (vnode) {
-        return m('table.c-slider', m('tr', [
+        return m('table.c-slider', { id: initial_vnode.attrs.id }, m('tr', [
           // m('td.c-slider-value', val),
           m('td.c-count-value', m('input.c-input', {
             type: 'number', value: val,
@@ -92,19 +104,15 @@
 
   function Count(initial_vnode) {
 
-    var { val, min, max } = inRange(
-      initial_vnode.attrs.value,
-      initial_vnode.attrs.min,
-      initial_vnode.attrs.max,
-    );
+    var { val, min, max } = inRange(initial_vnode);
 
     function decrement() { val = (val > min) ? (val - 1) : min; val = val > max ? max : val; }
     function increment() { val = (val < max) ? (val + 1) : max; val = val < min ? min : val; }
 
     return {
       view: function (vnode) {
-        return m('table.c-count._inline-block', m('tr', [
-          // m('td.c-count-value', val),
+        return m('table.c-count._inline-block', { id: initial_vnode.attrs.id }, m('tr', [
+          m('td.c-count-value', val),
           m('td.c-count-value', m('input.c-input', {
             type: 'number', min: min, max: max, value: val,
             oncreate: function (_vnode) {
@@ -123,55 +131,36 @@
     }
   }
 
-  function InputNumber(initial_vnode) {
-
-    var { val, min, max } = inRange(
-      initial_vnode.attrs.value,
-      initial_vnode.attrs.min,
-      initial_vnode.attrs.max,
-    );
-
-    return {
-      view: function (vnode) {
-        return m('input.c-input', {
-          type: 'number', min: min, max: max, value: val,
-          oncreate: function (_vnode) {
-            _vnode.dom.addEventListener('change', function (e) {
-              let v = _vnode.dom.value;
-              v = isNaN(v) ? val : Number(v);
-              val = v < min ? min : v > max ? max : v;
-              m.redraw();
-            });
-          },
-        });
-      }
-    }
-  }
-
   function Calculator(initial_vnode) {
 
     var testVal = 100;
     var countVal = 100;
+    var gliderVal = 20;
     var sliderVal = 10;
-
+    var slidexVal = 90;
+  
     return {
       view: function () {
         return [
           m('div.c-display._pa._radius-x25r', [
             m('a.c-close._btnlink._small._no-pad._lh-0', { href: '#!/hello', title: 'Close Calculator' }, itext('×')),
             m('h3._h6._no-margin', 'Takaful Calculator'), m('hr'),
-            m(SliderX, { id: 'sliderValueX', min: 0, max: 100, value: sliderVal }),
+            m(Glider, { id: 'glider', min: 0, max: 100, value: gliderVal }),
             m('div', [
               m('span.c-row-label', 'Slider'),
-              m(Slider, { id: 'sliderValue', min: 0, max: 100, value: sliderVal }),
+              m(Slider, { id: 'slider', min: 0, max: 100, value: sliderVal }),
+            ]),
+            m('div', [
+              m('span.c-row-label', 'Slidex'),
+              m(Slider, { id: 'slidex', min: 0, max: 100, value: slidexVal }),
             ]),
             m('div', [
               m('span.c-row-label', 'Count'),
-              m(Count, { min: 0, max: 200, value: countVal }),
+              m(Count, { id:'count', min: 0, max: 200, value: countVal }),
             ]),
             m('div', [
               m('span.c-row-label', 'Test'),
-              m('table.c-count._inline-block', m('tr', [
+              m('table.c-count._inline-block', {id:'test'}, m('tr', [
                 m('td.c-count-value', testVal),
                 m('input', {
                   type: 'number', min: 0, max: 99999, value: testVal,
@@ -190,8 +179,8 @@
           ]),
         ]
       }
-    }
-  };
+    };
+  }
 
   var Hello = {
     view: function () {
@@ -201,35 +190,35 @@
     }
   };
 
-  var Example = {
+  // var Example = {
+  //   oninit: function(vnode) {
+  //     c.log('initialized');
+  //   },
+  //   oncreate: function(vnode) {
+  //     console.log('DOM created')
+  //   },
+  //   onbeforeupdate: function(newVnode, oldVnode) {
+  //     return true
+  //   },
+  //   onupdate: function(vnode) {
+  //     console.log('DOM updated')
+  //   },
+  //   onbeforeremove: function(vnode) {
+  //     console.log('exit animation can start')
+  //     return new Promise(function(resolve) {
+  //       // call after animation completes
+  //       resolve()
+  //     })
+  //   },
+  //   onremove: function(vnode) {
+  //     console.log('removing DOM element')
+  //   },
+  //   view: function (vnode) {
+  //     return m('div', 'Hello')
+  //   }
+  // }
 
-    // oninit: function(vnode) {
-    //   c.log('initialized');
-    // },
-    // oncreate: function(vnode) {
-    //   console.log('DOM created')
-    // },
-    // onbeforeupdate: function(newVnode, oldVnode) {
-    //   return true
-    // },
-    // onupdate: function(vnode) {
-    //   console.log('DOM updated')
-    // },
-    // onbeforeremove: function(vnode) {
-    //   console.log('exit animation can start')
-    //   return new Promise(function(resolve) {
-    //     // call after animation completes
-    //     resolve()
-    //   })
-    // },
-    // onremove: function(vnode) {
-    //   console.log('removing DOM element')
-    // },
-    // view: function (vnode) {
-    //   return m('div', 'Hello')
-    // }
-
-  }
+  // ===========================================================
 
   function loadAppTo(e) {
     m.route(e, '/calculator', {
@@ -239,18 +228,23 @@
   }
 
   w.addEventListener('load', function () {
+
     log('The entire page is fully loaded, including all deferred scripts.');
     // log(calculator,load_calculator_to);
+
     var e;
+
     if (w.load_calculator_to) {
       log(`load_calculator_to: id: ${w.load_calculator_to}`);
       e = d.getElementById(w.load_calculator_to);
     } else if (calculator) {
-      log(`load_calculator_to: dom: `, calculator);
-      e = calculator;
+      log(`load_calculator_to: dom: `, w.calculator);
+      e = w.calculator;
     }
     if (!e) { return err('Fail to load calculator. No DOM found.'); }
+
     loadAppTo(e);
+
   });
 
 })(

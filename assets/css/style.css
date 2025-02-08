@@ -33,7 +33,8 @@ input[type="number"]{
 .c-slider {
   display: inline-block;
   vertical-align: middle;
-  width: 30em;
+  width: 100%;
+  max-width: 30em;
 }
 
 .c-count button,
@@ -135,3 +136,5 @@ input[type="range"]::-webkit-slider-thumb {
   margin: auto;
   width: 100%;
 }
+
+#slidex .c-slider-input { rotate:180deg; }
