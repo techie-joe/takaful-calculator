@@ -168,7 +168,7 @@
               m('span.c-row-label', 'Test'),
               m('table.c-count._inline-block', { id: 'test' }, m('tr', [
                 m('td.c-count-value', _test),
-                m('input', {
+                m('td.c-count-value', m('input.c-input2', {
                   type: 'number', min: 0, max: 99999, value: _test,
                   oncreate: function (_vnode) {
                     var min = 0;
@@ -182,7 +182,7 @@
                     _vnode.dom.addEventListener('change', updateInput);
                     _vnode.dom.addEventListener('keyup', updateInput);
                   },
-                }),
+                })),
               ])),
             ]),
             m('hr'),

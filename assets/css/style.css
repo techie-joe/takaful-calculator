@@ -73,16 +73,18 @@ input[type="number"]{
   border:none;
 }
 
+.c-count-value .c-input2,
 .c-count-value .c-input {
   color: inherit;
   font-size: 1em;
-  padding: 0 .2em;
+  padding: 0 0 0 .2em;
   font-family: inherit;
   display: inline-block;
   width: 3em;
-  margin: .1em -.2em 0;
+  margin: .1em 0 0 -.2em;
 }
 
+#test  .c-input2,
 #count .c-input {
   width: 5.5em;
 }
