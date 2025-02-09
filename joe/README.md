@@ -9,7 +9,10 @@
 - create `index.html` files for root and test. and build propper navigation.
 - create initial takaful calculator `calculator.js` using mithril.
 - add sliders and clickers.
-- improve sliders and clikers (add event listeners and sync values)
+- improve sliders and clikers (add event listeners and sync values).
+- style: adjust,
+  add: test 1 and 2,
+  improve: component state is now preserved globally.
 
 ### To do list
 - ...
