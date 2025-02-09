@@ -119,7 +119,7 @@
       },
       view: function (vnode) {
         return m('table.c-slider', { id: initial_vnode.attrs.id }, m('tr', [
-          m('td.c-slider-value', val),
+          // m('td.c-slider-value', val),
           m('td.c-count-value', m('input[type=number].c-input', {
             value: val,
             oncreate: function (_vnode) {
