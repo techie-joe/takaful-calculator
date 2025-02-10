@@ -126,7 +126,7 @@ input[type="range"].c-slider-input::-webkit-slider-thumb {
   cursor: pointer;
 }
 
-#slidex .c-slider-input {
+.c-slider-input.c-reverse {
   rotate: 180deg;
 }
 

@@ -123,7 +123,7 @@
 
   function Slider(initial_vnode) {
 
-    var { id, title, update } = initial_vnode.attrs;
+    var { id, title, update, reverse } = initial_vnode.attrs;
     var { val, min, max } = inRange(initial_vnode);
 
     function decrement() { val = Math.max(min, val - 1); update(val); }
@@ -147,16 +147,13 @@
           m('td', m('button.c-sr-button', { onclick: decrement }, '-')),
           m('td', m('button.c-sr-button', { onclick: increment }, '+')),
           m('td.c-slider-td', m('input[type=range].c-slider-input', {
-            title: title,
-            min: min, max: max, value: val,
-            onchange: function (e) { val = Number(e.target.value); },
-            oncreate: function (_vnode) {
-              _vnode.dom.addEventListener('input', function (e) {
-                val = Number(e.target.value);
-                update(val);
-                m.redraw();
-              });
-            },
+            title: title, class: reverse ? 'c-reverse' : '',
+            min: min, max: max, value: reverse ? (max - val) : val,
+            oninput: function (e) {
+              val = Number(e.target.value);
+              if (reverse) { val = Number(e.target.max) - val }
+              update(val);
+            }
           }))
         ]))
       }
@@ -306,8 +303,8 @@
           m('div.i_row', [
             m('span.c-input-label', 'Slidex'),
             m(Slider, {
-              id: 'slidex', min: 0, max: 100, value: (100 - slidex),
-              update: function (v) { slidex = ( 100 - v ); }
+              id: 'slidex', min: 0, max: 100, value: slidex, reverse: true,
+              update: function (v) { slidex = v; }
             }),
           ]),
           m('div.i_row', [
