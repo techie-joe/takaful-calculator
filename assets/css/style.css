@@ -1,125 +1,25 @@
-#_html       { background:#cce }
-._dark#_html { background:#223 }
+#_html {
+  background: #cce;
+}
+._dark#_html {
+  background: #223;
+}
 
-.nav-button { min-width: 10rem; }
+.nav-button {
+  min-width: 10rem;
+}
 ._nav_layout,
 ._header_layout,
 ._footer_layout,
 ._main_layout,
-._page_layout { max-width:60rem }
-#_heading { padding-top:1em }
-#_about { margin-top:-1em }
-
-input[type="number"]{
-  padding-inline-end: 0;
+._page_layout {
+  max-width: 60rem;
 }
-
-input[type="text"],
-input[type="number"]{
-  border-radius: .25rem;
-  border: 1px solid #999;
-  background-color:#e9e9e9;
-  color:inherit;
-  padding-block: 0;
+#_heading {
+  padding-top: 1em;
 }
-
-._dark input[type="text"],
-._dark input[type="number"]{
-  border-color:#444;
-  background-color:#1a1a1a;
-}
-
-.c-row-label {
-  min-width: 5em;
-  display: inline-block;
-  vertical-align: middle;
-  font-size: .9em;
-  min-height: 1.76em;
-  padding-top: 0.2em;}
-
-.c-count,
-.c-slider {
-  display: inline-block;
-  vertical-align: middle;
-  width: 100%;
-  max-width: 20rem;
-}
-
-.c-count button,
-.c-slider button {
-  min-width: 1.5em;
-  min-height: 1.5em;
-  font-size: 0.9rem;
-  font-weight: bold;
-  font-family: monospace;
-  line-height: 1.2;
-  border-radius: 1em;
-  border-width: 0;
-  cursor: pointer;
-}
-
-.c-count-value,
-.c-slider-value {
-  font-size: .9em;
-  min-width: 4rem;
-}
-
-.c-count-value input[type=number].c-input::-webkit-outer-spin-button,
-.c-count-value input[type=number].c-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
-.c-count-value input[type=number].c-input {
-  -moz-appearance: textfield;
-}
-
-._dark .c-count-value .c-input,
-.c-count-value .c-input {
-  background:none;
-  border:none;
-}
-
-.c-count-value .c-input2,
-.c-count-value .c-input {
-  color: inherit;
-  font-size: 1em;
-  padding: 0 0 0 .2em;
-  font-family: inherit;
-  display: inline-block;
-  width: 3em;
-  margin: .1em 0 0 -.2em;
-}
-
-#number .c-input2,
-#count .c-input {
-  width: 4em;
-}
-
-.c-absolute {
-  position: absolute;
-  width: 30em;
-  top: 1rem;
-  right: 2em;  
-}
-
-.c-relative { position: relative; }
-
-@media (min-width: 550px) {
-  .c-relative { top: -7rem; }
-}
-@media (min-width: 1050px) {
-  .c-relative { right: -2rem; }
-}
-
-.c-display {
-  min-width: 8em;
-  min-height: 20em;
-  position: relative;
-}
-
-.c-close {
-  position: absolute;
-  top:1rem;
-  right:1rem;
+#_about {
+  margin-top: -1em;
 }
 
 .c-display {
@@ -134,29 +34,191 @@ input[type="number"]{
   border-color: #111;
 }
 
-/* =================================================== */
+.c-absolute {
+  position: absolute;
+  width: 30em;
+  top: 1rem;
+  right: 2em;
+}
 
-input[type="range"] {
+.c-relative {
+  position: relative;
+}
+
+@media (min-width: 550px) {
+  .c-relative {
+    top: -7rem;
+  }
+}
+@media (min-width: 1050px) {
+  .c-relative {
+    right: -2rem;
+  }
+}
+
+.c-display {
+  min-width: 8em;
+  min-height: 20em;
+  position: relative;
+}
+
+.c-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.c-sr-button {
+  min-width: 1.5em;
+  min-height: 1.5em;
+  font-size: 0.9rem;
+  font-weight: bold;
+  font-family: monospace;
+  line-height: 1.2;
+  border-radius: 1em;
+  border-width: 0;
+  cursor: pointer;
+}
+
+.c-input-label {
+  min-width: 5em;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 0.9em;
+  min-height: 1.76em;
+  padding-top: 0.2em;
+}
+
+.c-input-table {
+  /* outline: 1px solid yellow; */
+  display: inline-table;
+  vertical-align: middle;
+  max-width: 20rem;
+}
+
+.c-slider-td {
+  /* outline: 1px solid red; */
+  width: 100%;
+}
+
+input[type="range"].c-slider-input {
   width: 100%;
   height: 5px;
   margin: auto;
+  vertical-align: middle;
 }
 
-input[type="range"]::-webkit-slider-thumb {
+input[type="range"].c-slider-input::-webkit-slider-thumb {
   width: 14px;
   height: 14px;
   cursor: pointer;
 }
 
-.c-slider-display {
-  font-size:.9em;
-  line-height: 1;
-  text-align: center;
-  display: block;
-  margin: auto;
-  width: 100%;
+#slidex .c-slider-input {
+  rotate: 180deg;
 }
 
-#slidex .c-slider-input { rotate:180deg; }
+.c-glider-display {
+  font-size: 0.9em;
+  line-height: 1;
+  display: block;
+  position: relative;
+  margin: auto;
+  width: 100%;
+  user-select: none;
+  margin-bottom: 0.3rem;
+}
 
-.i_row { margin:.5rem 0; }
+.c-glider-display-text {
+  line-height: 1;
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  z-index: 1;
+  margin-left: -2em;
+  width: 4em;
+  text-align: center;
+  background-color: #111;
+  color: #eee;
+  padding: 0.2em;
+  border-radius: 0.3em;
+}
+
+.c-glider-display-text::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #111;
+  margin-left: -10px;
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  z-index: -1;
+}
+
+.i_row {
+  margin: 0.5rem 0;
+}
+
+.c-count-value input[type="number"].c-input::-webkit-outer-spin-button,
+.c-count-value input[type="number"].c-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.c-count-value input[type="number"].c-input {
+  -moz-appearance: textfield;
+}
+
+input[type="number"] {
+  padding-inline-end: 0;
+}
+
+input[type="text"],
+input[type="number"] {
+  border-radius: 0.25rem;
+  border: 1px solid #999;
+  background-color: #e9e9e9;
+  color: inherit;
+  padding-block: 0;
+  line-height: 1.56;
+}
+
+._dark input[type="text"],
+._dark input[type="number"] {
+  border-color: #444;
+  background-color: #1a1a1a;
+}
+
+/*
+
+.c-slider-value,
+.c-count-value {
+  font-size: .9em;
+  min-width: 3rem;
+}
+
+       .c-count-value .c-input,
+._dark .c-count-value .c-input {
+  background:none;
+  border:none;
+}
+
+.c-count-value .c-input {
+  color: inherit;
+  font-size: 1em;
+  padding: 0 0 0 .2em;
+  font-family: inherit;
+  display: inline-block;
+  width: 100%;
+  margin: .1em 0 0 -.2em;
+}
+
+#number .c-count-value {
+  width: 5rem;
+}
+
+#glider-input { width:4rem; }
+
+/* =================================================== */
