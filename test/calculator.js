@@ -148,10 +148,10 @@
           m('td', m('button.c-sr-button', { onclick: increment }, '+')),
           m('td.c-slider-td', m('input[type=range].c-slider-input', {
             title: title, class: reverse ? 'c-reverse' : '',
-            min: min, max: max, value: reverse ? (max - val) : val,
+            min: min, max: max, value: reverse ? (max - val + min) : val,
             oninput: function (e) {
               val = Number(e.target.value);
-              if (reverse) { val = Number(e.target.max) - val }
+              if (reverse) { val = Number(e.target.max) - val + Number(e.target.min) }
               update(val);
             }
           }))
@@ -395,7 +395,7 @@
             m('div.i_row', [
               m('span.c-input-label', 'Age'),
               m(Slider, {
-                id: 'age', min: 18, max: 90, value: age,
+                id: 'age', min: 18, max: 90, value: age, reverse:true,
                 update: function (v) { age = v; }
               }),
             ]),
