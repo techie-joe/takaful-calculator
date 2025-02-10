@@ -13,6 +13,10 @@
 - style: adjust,
   add: test 1 and 2,
   improve: component state is now preserved globally.
+- improve code readability and reusability.
+  add functionality and better supports
+- optimize app performance and robustness.
+- feat: add calculator UI with new input fields and update styles.
 
 ### To do list
 - ...

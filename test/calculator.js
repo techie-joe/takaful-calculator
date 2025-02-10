@@ -82,7 +82,7 @@
     var { val, min, max } = inRange(initial_vnode);
 
     function retip() {
-      return (val / max * 99);
+      return ((val - min) / (max - min) * 99);
     }
 
     var tip = retip();
@@ -218,12 +218,12 @@
   //   }
   // }
 
-  var route = {}, routeStart = '/start';
+  var route = {}, routeStart = '/calculator';
 
   route['/start'] = {
     view: function (vnode) {
       return cDisplay([
-        m('a._btnlink._small', { href: '#!/calculator' }, 'Open Calculator'), ' ',
+        m('a._btnlink._small', { href: '#!/calculator', class:'primary-button' }, 'Open Calculator'), ' ',
         m('a._btnlink._small', { href: '#!/test' }, 'Test'), ' ',
         m('a._btnlink._small', { href: '#!/test2' }, 'Test 2'), ' ',
         hr,
@@ -339,6 +339,12 @@
     }
   }
 
+  var monthlyIncome = 3500;
+  var monthlyContribution = 120;
+  var coverage = 100000;
+  var age = 25;
+  var savings = 210000;
+
   route['/calculator'] = function Calculator(initial_vnode) {
 
     return {
@@ -351,8 +357,68 @@
             m('div#c-intro',
               m('span', 'Takaful Calculator')
             ),
-            div('Coming soon ..'),
+            // div('Coming soon ..'),
+
+            m('div.i_row', [
+              m('span.c-input-label', 'Monthly Income'),
+              m('table.c-input-table', { id: 'income' }, m('tr', [
+                // m('td.c-value-td', number),
+                m('td.c-input-td',
+                  m('input[type=number].c-input', {
+                    id: 'income-input',
+                    value: monthlyIncome, min: 0, max: 99999,
+                    oninput: function (e) {
+                      // monthlyIncome = e.target.value;
+                      monthlyIncome = getNumberFrom(e.target);
+                    }
+                  })
+                ),
+              ])),
+            ]),
+
+            m('div.i_row', [
+              m('span.c-input-label', 'Coverage'),
+              m(Glider, {
+                id: 'coverage', min: 50000, max: 900000, value: coverage,
+                update: function (v) { coverage = v; }
+              }),
+            ]),
+
+            m('div.i_row', [
+              m('span.c-input-label', 'Contribution'),
+              m(Slider, {
+                id: 'contribution', min: 0, max: 2000, value: monthlyContribution,
+                update: function (v) { monthlyContribution = v; }
+              }),
+            ]),
+
+            m('div.i_row', [
+              m('span.c-input-label', 'Age'),
+              m(Slider, {
+                id: 'age', min: 18, max: 90, value: age,
+                update: function (v) { age = v; }
+              }),
+            ]),
+
+            m('div.i_row', [
+              m('span.c-input-label', 'Savings'),
+              m('table.c-input-table', { id: 'savings' }, m('tr', [
+                // m('td.c-value-td', number),
+                m('td.c-input-td',
+                  m('input[type=number].c-input', {
+                    id: 'savings-input',
+                    value: savings, min: 0, max: 99999,
+                    oninput: function (e) {
+                      // savings = e.target.value;
+                      savings = getNumberFrom(e.target);
+                    }
+                  })
+                ),
+              ])),
+            ]),
+
             hr,
+            blink({ href: '#!/start', class:'primary-button' }, 'Apply Now'), ' ',
             blink({ href: '#!/start' }, 'Close'), ' ',
           ]),
         ]

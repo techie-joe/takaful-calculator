@@ -98,7 +98,7 @@
   vertical-align: middle;
   font-size: 0.9em;
   min-height: 1.76em;
-  padding-top: 0.2em;
+  padding-top: 0.35em;
 }
 
 .c-input-table {
@@ -243,4 +243,14 @@ input[type="number"] {
   text-align:center;
   margin:-1rem;
   margin-bottom:1em;
+}
+
+.primary-button {
+  background-color: #d5ba00DD !important;
+  color:#000 !important;
+  border-color:#000 !important;
+}
+
+a.primary-button:hover {
+  background-color: #ffd000 !important;
 }
