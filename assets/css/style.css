@@ -23,6 +23,14 @@
 }
 
 .c-display {
+  min-width: 15em;
+  min-height: 15em;
+  position: relative;
+  /* overflow: auto; */
+  /* resize: auto; */
+}
+
+.c-display {
   color: #222;
   background-color: #ddd;
   border: 1px solid #aaa;
@@ -50,16 +58,10 @@
     top: -7rem;
   }
 }
-@media (min-width: 1050px) {
+@media (min-width: 1100px) {
   .c-relative {
     right: -2rem;
   }
-}
-
-.c-display {
-  min-width: 8em;
-  min-height: 20em;
-  position: relative;
 }
 
 .c-close {
@@ -124,9 +126,9 @@ input[type="range"].c-slider-input::-webkit-slider-thumb {
   display: block;
   position: relative;
   margin: auto;
-  width: 100%;
+  width: 95%;
   user-select: none;
-  margin-bottom: 0.3rem;
+  margin-bottom: 3px;
 }
 
 .c-glider-display-text {
@@ -149,13 +151,13 @@ input[type="range"].c-slider-input::-webkit-slider-thumb {
   display: block;
   width: 0;
   height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 10px solid #111;
-  margin-left: -10px;
+  border-left :  8px solid transparent;
+  border-right:  8px solid transparent;
+  border-top  :  8px solid #111;
+  margin-left : -8px;
+  bottom      : -8px;
   position: absolute;
   left: 50%;
-  bottom: -10px;
   z-index: -1;
 }
 

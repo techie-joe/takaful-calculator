@@ -81,31 +81,41 @@
     var { id, update } = initial_vnode.attrs;
     var { val, min, max } = inRange(initial_vnode);
 
+    function retip() {
+      return (val / max * 99);
+    }
+
+    var tip = retip();
+
     return {
       view: function (vnode) {
         var output = m('div.c-glider-display',
-          m('span.c-glider-display-text', `${formatNumber(val)}`)
+          m('span.c-glider-display-text', {
+            style: { left: `${tip}%` }
+          }, `${formatNumber(val)}`)
         );
         var input = m('input[type=range].c-slider-input', {
           min: min, max: max, value: val,
           oninput: function (e) {
             val = Number(e.target.value);
+            tip = retip();
             update(val);
           }
         });
         return [
           m('span.c-value',
             m('input[type=number].c-input', {
-              id: id+'-input',
+              id: id + '-input',
               value: val, min: min, max: max,
               oninput: function (e) {
                 // number = e.target.value;
                 val = getNumberFrom(e.target);
+                tip = retip();
                 update(val);
               }
             })
           ),
-          m('div._p.c-full-slider', [output, input]),
+          m('div.c-full-slider._pt-x5r._pb', [output, input]),
         ]
       }
     }
@@ -125,7 +135,7 @@
           // m('td.c-value-td', val),
           m('td.c-input-td',
             m('input[type=number].c-input', {
-              id: id+'-input',
+              id: id + '-input',
               value: val, min: min, max: max,
               oninput: function (e) {
                 // number = e.target.value;
@@ -162,7 +172,7 @@
 
     return {
       view: function (vnode) {
-        return m('table.c-input-table.c-count._inline-block', { id: id }, m('tr', [
+        return m('table.c-input-table.c-count', { id: id }, m('tr', [
           // m('td.c-value-td', val),
           m('td.c-input-td',
             m('input[type=number].c-input', {
@@ -236,7 +246,7 @@
           m('table._mono', [
             vd('',
               m('input[type=number]', {
-                id:'test_v-input',
+                id: 'test_v-input',
                 value: test_v,
                 oninput: function (e) {
                   // number = e.target.value;
