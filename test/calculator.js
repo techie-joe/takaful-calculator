@@ -83,7 +83,9 @@
 
     return {
       view: function (vnode) {
-        var output = m('div.c-slider-display', `${formatNumber(val)}`);
+        var output = m('div.c-glider-display',
+          m('span.c-glider-display-text', `${formatNumber(val)}`)
+        );
         var input = m('input[type=range].c-slider-input', {
           min: min, max: max, value: val,
           oninput: function (e) {
@@ -92,7 +94,7 @@
           }
         });
         return [
-          m('span.c-count-value',
+          m('span.c-value',
             m('input[type=number].c-input', {
               id: id+'-input',
               value: val, min: min, max: max,
@@ -119,9 +121,9 @@
 
     return {
       view: function (vnode) {
-        return m('table.c-slider', { id: id }, m('tr', [
-          // m('td.c-slider-value', val),
-          m('td.c-count-value',
+        return m('table.c-input-table.c-slider', { id: id }, m('tr', [
+          // m('td.c-value-td', val),
+          m('td.c-input-td',
             m('input[type=number].c-input', {
               id: id+'-input',
               value: val, min: min, max: max,
@@ -132,9 +134,9 @@
               }
             })
           ),
-          m('td', m('button', { onclick: decrement }, '-')),
-          m('td', m('button', { onclick: increment }, '+')),
-          m('td', { style: 'width:100%' }, m('input[type=range].c-slider-input', {
+          m('td', m('button.c-sr-button', { onclick: decrement }, '-')),
+          m('td', m('button.c-sr-button', { onclick: increment }, '+')),
+          m('td.c-slider-td', m('input[type=range].c-slider-input', {
             title: title,
             min: min, max: max, value: val,
             onchange: function (e) { val = Number(e.target.value); },
@@ -160,11 +162,11 @@
 
     return {
       view: function (vnode) {
-        return m('table.c-count._inline-block', { id: id }, m('tr', [
-          // m('td.c-count-value', val),
-          m('td.c-count-value',
+        return m('table.c-input-table.c-count._inline-block', { id: id }, m('tr', [
+          // m('td.c-value-td', val),
+          m('td.c-input-td',
             m('input[type=number].c-input', {
-              id: id+'-input',
+              id: id + '-input',
               value: val, min: min, max: max,
               oninput: function (e) {
                 // number = e.target.value;
@@ -173,8 +175,8 @@
               }
             })
           ),
-          m('td', m('button', { onclick: decrement }, '-')),
-          m('td', m('button', { onclick: increment }, '+')),
+          m('td', m('button.c-sr-button', { onclick: decrement }, '-')),
+          m('td', m('button.c-sr-button', { onclick: increment }, '+')),
         ]));
       }
     }
@@ -277,39 +279,39 @@
           closeButton(),
           div(b('Test 2')), hr,
           m('div.i_row', [
-            m('span.c-row-label', 'Glider'),
+            m('span.c-input-label', 'Glider'),
             m(Glider, {
               id: 'glider', min: 0, max: 10000, value: glider,
               update: function (v) { glider = v; }
             }),
           ]),
           m('div.i_row', [
-            m('span.c-row-label', 'Slider'),
+            m('span.c-input-label', 'Slider'),
             m(Slider, {
               id: 'slider', min: 0, max: 100, value: slider,
               update: function (v) { slider = v; }
             }),
           ]),
           m('div.i_row', [
-            m('span.c-row-label', 'Slidex'),
+            m('span.c-input-label', 'Slidex'),
             m(Slider, {
               id: 'slidex', min: 0, max: 100, value: slidex,
               update: function (v) { slidex = v; }
             }),
           ]),
           m('div.i_row', [
-            m('span.c-row-label', 'Count'),
+            m('span.c-input-label', 'Count'),
             m(Count, {
               id: 'count', min: 0, max: 200, value: count,
               update: function (v) { count = v; }
             }),
           ]),
           m('div.i_row', [
-            m('span.c-row-label', 'Number'),
-            m('table.c-count._inline-block', { id: 'number' }, m('tr', [
-              // m('td.c-count-value', number),
-              m('td.c-count-value',
-                m('input[type=number].c-input2', {
+            m('span.c-input-label', 'Number'),
+            m('table.c-input-table', { id: 'number' }, m('tr', [
+              // m('td.c-value-td', number),
+              m('td.c-input-td',
+                m('input[type=number].c-input', {
                   id: 'number-input',
                   value: number, min: 0, max: 99999,
                   oninput: function (e) {
