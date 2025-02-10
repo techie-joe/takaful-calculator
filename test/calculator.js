@@ -2,61 +2,57 @@
   w, d, c
 ) {
   var
-    save = {},
     err = function (err) { return c.error(`Calculator Error: ${err}`) },
-    log = c.log,
-    xxx = undefined;
+    log = c.log;
 
   // ===========================================================
 
-  var
-    hr = m('hr'),
-    ems = {};
+  var ems = {};
 
   [
-    'div', 'table', 'tr', 'td', 'b'
-  ].forEach(function (tag) {
+    'div', 'table', 'tr', 'td', 'b',
+    ['cDisplay', 'div.c-display._pa._radius-x25r'],
+    ['blink', 'a._btnlink._smaller']
+  ].forEach(function (input) {
+    let [tag, sel] = [input, input];
+    if (Array.isArray(input)) {
+      [tag, sel] = input;
+    }
     ems[tag] = function (opt, content) {
       if (arguments.length === 1) { content = opt; opt = {}; }
-      return m(tag, opt, content);
+      return m(sel, opt, content);
     };
   });
 
   var
-    div = ems.div,
-    table = ems.table,
-    tr = ems.tr,
-    td = ems.td,
-    b = ems.b;
+    { cDisplay, blink, div, table, tr, td, b } = ems,
+    hr = m('hr');
 
   function vd(label, value) {
     return tr([td(label), td(':'), td(value)])
   }
-
-  [
-    ['cDisplay', 'div.c-display._pa._radius-x25r'],
-    ['blink', 'a._btnlink._smaller']
-  ].forEach(function (tag) {
-    ems[tag[0]] = function (opt, content) {
-      if (arguments.length === 1) { content = opt; opt = {}; }
-      return m(tag[1], opt, content);
-    };
-  });
-
-  var
-    cDisplay = ems.cDisplay,
-    blink = ems.blink;
 
   function itext(opt, content) {
     if (arguments.length === 1) { content = opt; opt = {}; }
     return m('i._itext', m('i.itext', opt, content));
   }
 
-  function closeButton(opt = {}, title = 'Close') {
-    if (arguments.length === 1) { title = opt; opt = {}; }
-    opt.href = '#!/start';
-    opt.title = title;
+  function closeButton(input) {
+    var opt = {
+      href: '#!/start',
+      title: 'Close'
+    };
+    if (typeof input == 'string') { opt.title = input }
+    else if (typeof input == 'object') { opt = input }
     return m('a.c-close._btnlink._small._no-pad._lh-0', opt, itext('×'))
+  }
+
+  function getNumberFrom(input) {
+    let
+      min = input.min || -Infinity,
+      max = input.max || Infinity,
+      val = Number(input.value);
+    return Math.max(min, Math.min(max, val));
   }
 
   function formatNumber(number) {
@@ -64,21 +60,14 @@
   }
 
   function inRange(vnode) {
-    var
-      val = vnode.attrs.value,
-      min = vnode.attrs.min,
-      max = vnode.attrs.max;
+    let { value: val, min, max } = vnode.attrs;
 
-    if (max < min) {
-      let _min = min;
-      min = max;
-      max = _min;
-    }
-    if (val) {
-      if (min) { val = val < min ? min : val; }
-      if (max) { val = val > max ? max : val; }
+    if (max < min) { [min, max] = [max, min]; }
+
+    if (val !== undefined) {
+      val = Math.max(min || -Infinity, Math.min(max || Infinity, val));
     } else {
-      val = min ? min : max ? max : val;
+      val = min !== undefined ? min : max !== undefined ? max : 0;
     }
 
     // log(min, max, val)
@@ -88,9 +77,10 @@
   // ===========================================================
 
   function Glider(initial_vnode) {
-    var min = initial_vnode.attrs.min;
-    var max = initial_vnode.attrs.max;
-    var val = initial_vnode.attrs.value;
+
+    var { _onupdate } = initial_vnode.attrs;
+    var { val, min, max } = inRange(initial_vnode);
+
     return {
       view: function (vnode) {
         var output = m('div.c-slider-display', `${val}`);
@@ -98,7 +88,7 @@
           min: min, max: max, value: val,
           oninput: function (e) {
             val = Number(e.target.value);
-            initial_vnode.attrs._onupdate(val);
+            _onupdate(val);
           }
         });
         return m('div._p.c-full-slider', [output, input])
@@ -108,35 +98,30 @@
 
   function Slider(initial_vnode) {
 
+    var { id, title, _onupdate } = initial_vnode.attrs;
     var { val, min, max } = inRange(initial_vnode);
 
-    function decrement() { val = (val > min) ? (val - 1) : min; val = val > max ? max : val; }
-    function increment() { val = (val < max) ? (val + 1) : max; val = val < min ? min : val; }
+    function decrement() { val = Math.max(min, val - 1); }
+    function increment() { val = Math.min(max, val + 1); }
 
     return {
-      onupdate: function (vnode) {
-        initial_vnode.attrs._onupdate(val);
-      },
+      onupdate: function (vnode) { _onupdate(val); },
       view: function (vnode) {
-        return m('table.c-slider', { id: initial_vnode.attrs.id }, m('tr', [
+        return m('table.c-slider', { id: id }, m('tr', [
           // m('td.c-slider-value', val),
-          m('td.c-count-value', m('input[type=number].c-input', {
-            value: val,
-            oncreate: function (_vnode) {
-              function updateInput(e) {
-                let v = _vnode.dom.value;
-                v = isNaN(v) ? val : Number(v);
-                val = v < min ? min : v > max ? max : v;
-                m.redraw();
+          m('td.c-count-value',
+            m('input[type=number].c-input', {
+              value: val, min: min, max: max,
+              oninput: function (e) {
+                // number = e.target.value;
+                val = getNumberFrom(e.target);
               }
-              _vnode.dom.addEventListener('change', updateInput);
-              _vnode.dom.addEventListener('keyup', updateInput);
-            },
-          })),
+            })
+          ),
           m('td', m('button', { onclick: decrement }, '-')),
           m('td', m('button', { onclick: increment }, '+')),
           m('td', { style: 'width:100%' }, m('input[type=range].c-slider-input', {
-            title: initial_vnode.attrs.title,
+            title: title,
             min: min, max: max, value: val,
             onchange: function (e) { val = Number(e.target.value); },
             oncreate: function (_vnode) {
@@ -151,34 +136,47 @@
     }
   }
 
-  function Values() {
-    return m('table._mono', [
-      vd('Glider', formatNumber(glider)),
-      vd('Slider', formatNumber(slider)),
-      vd('Slidex', formatNumber(slidex)),
-      vd('Count', formatNumber(count)),
-      vd('Number', formatNumber(number)),
-    ]);
-  }
+  function Count(initial_vnode) {
 
-  function Calculator(initial_vnode) {
+    var { id, _onupdate } = initial_vnode.attrs;
+    var { val, min, max } = inRange(initial_vnode);
+
+    function decrement() { val = Math.max(min, val - 1); }
+    function increment() { val = Math.min(max, val + 1); }
 
     return {
-      onupdate: function (vnode) { m.redraw(); },
-      view: function () {
-        return [
-          cDisplay([
-            closeButton('Close Calculator'),
-            m('h3._h6._no-margin', 'Takaful Calculator'),
-            hr,
-            div('Coming soon ..'),
-            hr,
-            blink({ href: '#!/start' }, 'Close'), ' ',
-          ]),
-        ]
+      onupdate: function (vnode) { _onupdate(val); },
+      view: function (vnode) {
+        return m('table.c-count._inline-block', { id: id }, m('tr', [
+          // m('td.c-count-value', val),
+          m('td.c-count-value',
+            m('input[type=number].c-input', {
+              value: val, min: min, max: max,
+              oninput: function (e) {
+                // number = e.target.value;
+                val = getNumberFrom(e.target);
+              }
+            })
+          ),
+          m('td', m('button', { onclick: decrement }, '-')),
+          m('td', m('button', { onclick: increment }, '+')),
+        ]));
       }
-    };
+    }
   }
+
+  var Values = {
+    view: function (vnode) {
+      return m('table._mono', [
+        vd('Glider', formatNumber(glider)),
+        vd('Slider', formatNumber(slider)),
+        vd('Slidex', formatNumber(slidex)),
+        vd('Count', formatNumber(count)),
+        vd('Number', formatNumber(number)),
+      ]);
+    }
+  }
+
 
   // var Example = {
   //   oninit: function(vnode) {
@@ -208,14 +206,16 @@
   //   }
   // }
 
-  var Hello = {
-    view: function () {
+  var route = {}, routeStart = '/start';
+
+  route['/start'] = {
+    view: function (vnode) {
       return cDisplay([
         m('a._btnlink._small', { href: '#!/calculator' }, 'Open Calculator'), ' ',
         m('a._btnlink._small', { href: '#!/test' }, 'Test'), ' ',
         m('a._btnlink._small', { href: '#!/test2' }, 'Test 2'), ' ',
         hr,
-        Values(),
+        m(Values),
         m('table._mono', [
           vd('test_v', formatNumber(test_v)),
         ]),
@@ -223,21 +223,24 @@
     }
   };
 
-  var test_v = 1;
+  var test_v = 1000;
 
-  function Test(initial_vnode) {
+  route['/test'] = function Test(initial_vnode) {
     return {
       view: function (vnode) {
         return cDisplay([
           closeButton(),
           div(b('Test')), hr,
           m('table._mono', [
-            vd('input', m('input[type=number]', {
-              value: test_v,
-              oninput: function (e) {
-                test_v = e.target.value;
-              }
-            })),
+            vd('input',
+              m('input[type=number]', {
+                value: test_v,
+                oninput: function (e) {
+                  // number = e.target.value;
+                  test_v = getNumberFrom(e.target);
+                }
+              })
+            ),
             vd('test_v', formatNumber(test_v)),
           ]),
           hr,
@@ -245,7 +248,7 @@
         ])
       }
     }
-  }
+  };
 
   var glider = 20;
   var slider = 10;
@@ -253,7 +256,7 @@
   var count = 100;
   var number = 1001;
 
-  function Test2(initial_vnode) {
+  route['/test2'] = function Test2(initial_vnode) {
     return {
       view: function (vnode) {
         return cDisplay([
@@ -268,7 +271,9 @@
               }
             }),
             m('span.c-row-label', 'Glider'),
-            m('span.c-count-value', glider),
+            m('span.c-count-value',
+              glider
+            ),
           ]),
           m('div.i_row', [
             m('span.c-row-label', 'Slider'),
@@ -278,7 +283,7 @@
                 slider = val;
                 m.redraw();
               }
-             }),
+            }),
           ]),
           m('div.i_row', [
             m('span.c-row-label', 'Slidex'),
@@ -309,17 +314,14 @@
                   value: number, min: 0, max: 99999,
                   oninput: function (e) {
                     // number = e.target.value;
-                    var min = 0;
-                    var max = 99999;
-                    let v = Number(e.target.value);
-                    number = v < min ? min : v > max ? max : v;
+                    number = getNumberFrom(e.target);
                   }
                 })
               ),
             ])),
           ]),
           hr,
-          Values(),
+          m(Values),
           hr,
           blink({ href: '#!/start' }, 'Close'), ' ',
         ])
@@ -327,49 +329,26 @@
     }
   }
 
-  function Count(initial_vnode) {
-
-    var { val, min, max } = inRange(initial_vnode);
-
-    function decrement() { val = (val > min) ? (val - 1) : min; val = val > max ? max : val; }
-    function increment() { val = (val < max) ? (val + 1) : max; val = val < min ? min : val; }
+  route['/calculator'] = function Calculator(initial_vnode) {
 
     return {
-      onupdate: function (vnode) {
-        initial_vnode.attrs._onupdate(val);
-      },
-      view: function (vnode) {
-        return m('table.c-count._inline-block', { id: initial_vnode.attrs.id }, m('tr', [
-          // m('td.c-count-value', val),
-          m('td.c-count-value',
-            m('input[type=number].c-input', {
-              value: val, min: min, max: max,
-              oninput: function (e) {
-                // val = e.target.value;
-                let v = Number(e.target.value);
-                val = v < min ? min : v > max ? max : v;
-              }
-            }
-            )),
-          m('td', m('button', { onclick: decrement }, '-')),
-          m('td', m('button', { onclick: increment }, '+')),
-        ]));
+      onupdate: function (vnode) { m.redraw(); },
+      view: function () {
+        return [
+          cDisplay([
+            closeButton('Close Calculator'),
+            m('h3._h6._no-margin', 'Takaful Calculator'),
+            hr,
+            div('Coming soon ..'),
+            hr,
+            blink({ href: '#!/start' }, 'Close'), ' ',
+          ]),
+        ]
       }
-    }
+    };
   }
 
   // ===========================================================
-
-  function loadAppTo(e) {
-
-    m.route(e, '/test2', {
-      '/start': Hello,
-      '/test': Test,
-      '/test2': Test2,
-      '/calculator': Calculator,
-    });
-
-  }
 
   w.addEventListener('load', function () {
 
@@ -390,7 +369,8 @@
 
     if (!e) { return err('Fail to load calculator. No DOM found.'); }
 
-    loadAppTo(e);
+    log(`routeStart : ${routeStart}`);
+    m.route(e, routeStart, route);
 
   });
 
