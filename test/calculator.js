@@ -78,20 +78,33 @@
 
   function Glider(initial_vnode) {
 
-    var { _onupdate } = initial_vnode.attrs;
+    var { id, update } = initial_vnode.attrs;
     var { val, min, max } = inRange(initial_vnode);
 
     return {
       view: function (vnode) {
-        var output = m('div.c-slider-display', `${val}`);
+        var output = m('div.c-slider-display', `${formatNumber(val)}`);
         var input = m('input[type=range].c-slider-input', {
           min: min, max: max, value: val,
           oninput: function (e) {
             val = Number(e.target.value);
-            _onupdate(val);
+            update(val);
           }
         });
-        return m('div._p.c-full-slider', [output, input])
+        return [
+          m('span.c-count-value',
+            m('input[type=number].c-input', {
+              id: id+'-input',
+              value: val, min: min, max: max,
+              oninput: function (e) {
+                // number = e.target.value;
+                val = getNumberFrom(e.target);
+                update(val);
+              }
+            })
+          ),
+          m('div._p.c-full-slider', [output, input]),
+        ]
       }
     }
   }
@@ -110,6 +123,7 @@
           // m('td.c-slider-value', val),
           m('td.c-count-value',
             m('input[type=number].c-input', {
+              id: id+'-input',
               value: val, min: min, max: max,
               oninput: function (e) {
                 // number = e.target.value;
@@ -150,6 +164,7 @@
           // m('td.c-count-value', val),
           m('td.c-count-value',
             m('input[type=number].c-input', {
+              id: id+'-input',
               value: val, min: min, max: max,
               oninput: function (e) {
                 // number = e.target.value;
@@ -219,6 +234,7 @@
           m('table._mono', [
             vd('',
               m('input[type=number]', {
+                id:'test_v-input',
                 value: test_v,
                 oninput: function (e) {
                   // number = e.target.value;
@@ -235,7 +251,7 @@
     }
   };
 
-  var glider = 20;
+  var glider = 2000;
   var slider = 10;
   var slidex = 90;
   var count = 100;
@@ -261,37 +277,31 @@
           closeButton(),
           div(b('Test 2')), hr,
           m('div.i_row', [
-            m(Glider, {
-              id: 'glider', min: 0, max: 100, value: glider,
-              _onupdate: function (val) {
-                glider = val;
-                m.redraw();
-              }
-            }),
             m('span.c-row-label', 'Glider'),
-            m('span.c-count-value',
-              glider
-            ),
+            m(Glider, {
+              id: 'glider', min: 0, max: 10000, value: glider,
+              update: function (v) { glider = v; }
+            }),
           ]),
           m('div.i_row', [
             m('span.c-row-label', 'Slider'),
             m(Slider, {
               id: 'slider', min: 0, max: 100, value: slider,
-              update: function (val) { slider = val; }
+              update: function (v) { slider = v; }
             }),
           ]),
           m('div.i_row', [
             m('span.c-row-label', 'Slidex'),
             m(Slider, {
               id: 'slidex', min: 0, max: 100, value: slidex,
-              update: function (val) { slidex = val; }
+              update: function (v) { slidex = v; }
             }),
           ]),
           m('div.i_row', [
             m('span.c-row-label', 'Count'),
             m(Count, {
               id: 'count', min: 0, max: 200, value: count,
-              update: function (val) { count = val; }
+              update: function (v) { count = v; }
             }),
           ]),
           m('div.i_row', [
@@ -300,6 +310,7 @@
               // m('td.c-count-value', number),
               m('td.c-count-value',
                 m('input[type=number].c-input2', {
+                  id: 'number-input',
                   value: number, min: 0, max: 99999,
                   oninput: function (e) {
                     // number = e.target.value;
