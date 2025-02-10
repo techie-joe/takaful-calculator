@@ -70,6 +70,16 @@
   right: 1rem;
 }
 
+.c-close {
+    background-color: #ddd;
+  color:#222;
+}
+
+._dark .c-close {
+  background-color: #222;
+  color:#ddd;
+}
+
 .c-sr-button {
   min-width: 1.5em;
   min-height: 1.5em;
@@ -224,3 +234,13 @@ input[type="number"] {
 #glider-input { width:4rem; }
 
 /* =================================================== */
+
+#c-intro {
+  background-color: #d5ba00DD;
+  color:#111;
+  padding:1rem;
+  border-radius: .25rem .25rem 0 0;
+  text-align:center;
+  margin:-1rem;
+  margin-bottom:1em;
+}

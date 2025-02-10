@@ -153,6 +153,7 @@
             oncreate: function (_vnode) {
               _vnode.dom.addEventListener('input', function (e) {
                 val = Number(e.target.value);
+                update(val);
                 m.redraw();
               });
             },
@@ -265,7 +266,7 @@
 
   var glider = 2000;
   var slider = 10;
-  var slidex = 90;
+  var slidex = 10;
   var count = 100;
   var number = 1001;
 
@@ -305,8 +306,8 @@
           m('div.i_row', [
             m('span.c-input-label', 'Slidex'),
             m(Slider, {
-              id: 'slidex', min: 0, max: 100, value: slidex,
-              update: function (v) { slidex = v; }
+              id: 'slidex', min: 0, max: 100, value: (100 - slidex),
+              update: function (v) { slidex = ( 100 - v ); }
             }),
           ]),
           m('div.i_row', [
@@ -349,8 +350,10 @@
         return [
           cDisplay([
             closeButton('Close Calculator'),
-            m('h3._h6._no-margin', 'Takaful Calculator'),
-            hr,
+            // m('h3._h6._no-margin', 'Takaful Calculator'), hr,
+            m('div#c-intro',
+              m('span', 'Takaful Calculator')
+            ),
             div('Coming soon ..'),
             hr,
             blink({ href: '#!/start' }, 'Close'), ' ',
