@@ -98,14 +98,13 @@
 
   function Slider(initial_vnode) {
 
-    var { id, title, _onupdate } = initial_vnode.attrs;
+    var { id, title, update } = initial_vnode.attrs;
     var { val, min, max } = inRange(initial_vnode);
 
-    function decrement() { val = Math.max(min, val - 1); }
-    function increment() { val = Math.min(max, val + 1); }
+    function decrement() { val = Math.max(min, val - 1); update(val); }
+    function increment() { val = Math.min(max, val + 1); update(val); }
 
     return {
-      onupdate: function (vnode) { _onupdate(val); },
       view: function (vnode) {
         return m('table.c-slider', { id: id }, m('tr', [
           // m('td.c-slider-value', val),
@@ -115,6 +114,7 @@
               oninput: function (e) {
                 // number = e.target.value;
                 val = getNumberFrom(e.target);
+                update(val);
               }
             })
           ),
@@ -138,14 +138,13 @@
 
   function Count(initial_vnode) {
 
-    var { id, _onupdate } = initial_vnode.attrs;
+    var { id, update } = initial_vnode.attrs;
     var { val, min, max } = inRange(initial_vnode);
 
-    function decrement() { val = Math.max(min, val - 1); }
-    function increment() { val = Math.min(max, val + 1); }
+    function decrement() { val = Math.max(min, val - 1); update(val); }
+    function increment() { val = Math.min(max, val + 1); update(val); }
 
     return {
-      onupdate: function (vnode) { _onupdate(val); },
       view: function (vnode) {
         return m('table.c-count._inline-block', { id: id }, m('tr', [
           // m('td.c-count-value', val),
@@ -155,6 +154,7 @@
               oninput: function (e) {
                 // number = e.target.value;
                 val = getNumberFrom(e.target);
+                update(val);
               }
             })
           ),
@@ -164,19 +164,6 @@
       }
     }
   }
-
-  var Values = {
-    view: function (vnode) {
-      return m('table._mono', [
-        vd('Glider', formatNumber(glider)),
-        vd('Slider', formatNumber(slider)),
-        vd('Slidex', formatNumber(slidex)),
-        vd('Count', formatNumber(count)),
-        vd('Number', formatNumber(number)),
-      ]);
-    }
-  }
-
 
   // var Example = {
   //   oninit: function(vnode) {
@@ -215,9 +202,7 @@
         m('a._btnlink._small', { href: '#!/test' }, 'Test'), ' ',
         m('a._btnlink._small', { href: '#!/test2' }, 'Test 2'), ' ',
         hr,
-        m(Values),
         m('table._mono', [
-          vd('test_v', formatNumber(test_v)),
         ]),
       ]);
     }
@@ -232,7 +217,7 @@
           closeButton(),
           div(b('Test')), hr,
           m('table._mono', [
-            vd('input',
+            vd('',
               m('input[type=number]', {
                 value: test_v,
                 oninput: function (e) {
@@ -255,6 +240,19 @@
   var slidex = 90;
   var count = 100;
   var number = 1001;
+
+  var TestValues = {
+    view: function (vnode) {
+      return m('table._mono', [
+        vd('Glider', formatNumber(glider)),
+        vd('Slider', formatNumber(slider)),
+        vd('Slidex', formatNumber(slidex)),
+        vd('Count', formatNumber(count)),
+        vd('Number', formatNumber(number)),
+        // vd('test_v', formatNumber(test_v)),
+      ]);
+    }
+  }
 
   route['/test2'] = function Test2(initial_vnode) {
     return {
@@ -279,30 +277,21 @@
             m('span.c-row-label', 'Slider'),
             m(Slider, {
               id: 'slider', min: 0, max: 100, value: slider,
-              _onupdate: function (val) {
-                slider = val;
-                m.redraw();
-              }
+              update: function (val) { slider = val; }
             }),
           ]),
           m('div.i_row', [
             m('span.c-row-label', 'Slidex'),
             m(Slider, {
               id: 'slidex', min: 0, max: 100, value: slidex,
-              _onupdate: function (val) {
-                slidex = val;
-                m.redraw();
-              }
+              update: function (val) { slidex = val; }
             }),
           ]),
           m('div.i_row', [
             m('span.c-row-label', 'Count'),
             m(Count, {
               id: 'count', min: 0, max: 200, value: count,
-              _onupdate: function (val) {
-                count = val;
-                m.redraw();
-              }
+              update: function (val) { count = val; }
             }),
           ]),
           m('div.i_row', [
@@ -321,7 +310,7 @@
             ])),
           ]),
           hr,
-          m(Values),
+          m(TestValues),
           hr,
           blink({ href: '#!/start' }, 'Close'), ' ',
         ])
