@@ -2,20 +2,32 @@
 <html class="_nojs _scrollbar _a" id="_html" lang="en"><!-- localhost:index -->
 
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
   <title>Test / Takaful Calculator</title>
-  <meta name="description" content="A stylish calculator for a takaful website"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
-  <meta id="_color-scheme" name="color-scheme"/>
-  <meta id="_theme-color" name="theme-color" content="#222222"/>
+  <meta name="description" content="A stylish calculator for a takaful website" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+  <meta id="_color-scheme" name="color-scheme" />
+  <meta id="_theme-color" name="theme-color" content="#222222" />
   <!--[if lt IE 9]><script src="//unpkg.com/html5shiv@3.7.3/dist/html5shiv.min.js"></script><![endif]-->
   <style>
-    html { background-color: #ddd; color: #666; } /* light theme - (default) */
-    @media (prefers-color-scheme: dark) { html { background-color: #222; color: #999; } } /* dark theme */
+    html {
+      background-color: #ddd;
+      color: #666;
+    }
+
+    /* light theme - (default) */
+    @media (prefers-color-scheme: dark) {
+      html {
+        background-color: #222;
+        color: #999;
+      }
+    }
+
+    /* dark theme */
   </style>
-  <link rel="stylesheet" media="all" href="/takaful-calculator/assets/css/ace.css?v=0.1.12&b=164.16"/>
-  <link rel="stylesheet" media="all" href="/takaful-calculator/assets/css/style.css?v=0.1.12&b=164.16"/>
+  <link rel="stylesheet" media="all" href="/takaful-calculator/assets/css/ace.css?v=0.1.12&b=164.16" />
+  <link rel="stylesheet" media="all" href="/takaful-calculator/assets/css/style.css?v=0.1.12&b=164.16" />
   <style>
   </style>
 </head>
@@ -31,7 +43,7 @@
               <span class="_lh-1 _tc_blue _no-wrap"> / Test</span>
             </h1>
             <p class="_small" id="_about">A stylish calculator for a takaful website</p>
-            <hr/>
+            <hr />
           </div>
         </header>
         <div class="_page_layout">
@@ -44,49 +56,60 @@
                   <a href="/takaful-calculator/saleh" class="_nav-item">Saleh</a>
                   <a href="/takaful-calculator/test" class="_nav-item">Test</a>
                 </div>
-                <hr/>
+                <hr />
                 <div class="_pre _b _p">
-                  <a title="Back to previous page" class="_nav-item" onclick="event.preventDefault();window.history.back();">← Back</a>
+                  <a title="Back to previous page" class="_nav-item"
+                    onclick="event.preventDefault();window.history.back();">← Back</a>
                   <!-- <a href=".." title="Parent directory" class="_nav-item">Parent</a> -->
-                  <a title="Change theme" class="_nav-item _nav-icon" onclick="event.preventDefault();base.theme.change();">☀</a>
-                  <a href="http://localhost/takaful-calculator/test" title="View on Localhost" class="_nav-item">Local</a>
-                  <a href="https://techie-joe.github.io/takaful-calculator/test" title="View live on GitHub" class="_nav-item">Live</a>
-                  <a href="https://github.com/techie-joe/takaful-calculator/tree/main/test" title="View source on GitHub" target="tc-github-source" class="_nav-item">View Source</a>
+                  <a title="Change theme" class="_nav-item _nav-icon"
+                    onclick="event.preventDefault();base.theme.change();">☀</a>
+                  <a href="http://localhost/takaful-calculator/test" title="View on Localhost"
+                    class="_nav-item">Local</a>
+                  <a href="https://techie-joe.github.io/takaful-calculator/test" title="View live on GitHub"
+                    class="_nav-item">Live</a>
+                  <a href="https://github.com/techie-joe/takaful-calculator/tree/main/test"
+                    title="View source on GitHub" target="tc-github-source" class="_nav-item">View Source</a>
                 </div>
-                <hr/>
+                <hr />
                 <div class="_p _pre _b">
                   <span id="jstest" class="_tc_red">[JavaScript KO]</span>
                   <script>
-                    (function(d){
+                    (function (d) {
                       var e = d.getElementById('jstest');
-                      e.innerHTML='[JavaScript OK]';
-                      e.setAttribute('class','_tc_green');
+                      e.innerHTML = '[JavaScript OK]';
+                      e.setAttribute('class', '_tc_green');
                     })(document);
                   </script>
                   <span id="host_test">[Local]</span>
                   <script>
-                    (function(w,d){
+                    (function (w, d) {
                       var e = d.getElementById('host_test');
-                      if ( w.location.hostname != 'localhost' ){
-                        e.innerHTML='[Live]';
-                        e.setAttribute('class','_tc_orange');
+                      if (w.location.hostname != 'localhost') {
+                        e.innerHTML = '[Live]';
+                        e.setAttribute('class', '_tc_orange');
                       }
-                    })(window,document);
+                    })(window, document);
                   </script>
                 </div>
               </div>
-              <hr/>
+              <hr />
             </div>
             <div class="_f-3-2">
 
-              <div id="calculator" class="calculator c-relative"><div class="c-display _pa _radius-x25r _mono _small" style='color:#888'>Loading ...</div></div>
+              <div id="calculator" class="calculator c-relative">
+                <div class="c-display _pa _radius-x25r _mono _small" style='color:#888'>Loading ...</div>
+              </div>
+              <script>var load_calculator_to = 'calculator';</script>
+
               <!-- <script src="https://unpkg.com/mithril/mithril.js"></script> -->
-              <script type="text/javascript" src="/takaful-calculator/assets/cjs/mithril.js?v=0.1.12&b=164.16" defer="defer"></script>
+              <script type="text/javascript" src="/takaful-calculator/assets/cjs/mithril.js?v=0.1.12&b=164.16"
+                defer="defer"></script>
               <script type="text/javascript" src="calculator.js?v=0.1.0&b=1.0" defer="defer"></script>
-              <script>var load_calculator_to='calculator';</script>
+              <!-- <script type="text/javascript" src="tester.js?v=0.1.0&b=1.0" defer="defer"></script> -->
+
             </div>
           </div>
-          <hr/>
+          <hr />
         </div>
         <footer id="_footer">
           <div class="_footer_layout">
