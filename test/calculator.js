@@ -2,50 +2,16 @@
   w, d, c
 ) {
   var
-    err = function (err) { return c.error(`Calculator Error: ${err}`) },
+    fun = {},
     log = c.log;
 
   // ===========================================================
+  // Functions
+  // ===========================================================
 
-  var ems = {};
+  function has(v) { return v !== undefined }
 
-  [
-    'div', 'table', 'tr', 'td', 'b',
-    ['cDisplay', 'div.c-display._pa._radius-x25r'],
-    ['blink', 'a._btnlink._smaller']
-  ].forEach(function (input) {
-    let [tag, sel] = [input, input];
-    if (Array.isArray(input)) {
-      [tag, sel] = input;
-    }
-    ems[tag] = function (opt, content) {
-      if (arguments.length === 1) { content = opt; opt = {}; }
-      return m(sel, opt, content);
-    };
-  });
-
-  var
-    { cDisplay, blink, div, table, tr, td, b } = ems,
-    hr = m('hr');
-
-  function vd(label, value) {
-    return tr([td(label), td(':'), td(value)])
-  }
-
-  function itext(opt, content) {
-    if (arguments.length === 1) { content = opt; opt = {}; }
-    return m('i._itext', m('i.itext', opt, content));
-  }
-
-  function closeButton(input) {
-    var opt = {
-      href: '#!/start',
-      title: 'Close'
-    };
-    if (typeof input == 'string') { opt.title = input }
-    else if (typeof input == 'object') { opt = input }
-    return m('a.c-close._btnlink._small._no-pad._lh-0', opt, itext('×'))
-  }
+  function err(err) { return c.error(`Calculator Error: ${err}`) }
 
   function getNumberFrom(input) {
     let
@@ -59,376 +25,461 @@
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
-  function inRange(vnode) {
-    let { value: val, min, max } = vnode.attrs;
-
-    if (max < min) { [min, max] = [max, min]; }
-
-    if (val !== undefined) {
-      val = Math.max(min || -Infinity, Math.min(max || Infinity, val));
-    } else {
-      val = min !== undefined ? min : max !== undefined ? max : 0;
-    }
-
-    // log(min, max, val)
-    return { val, min, max }
-  }
-
+  // ===========================================================
+  // Components
   // ===========================================================
 
-  function Glider(initial_vnode) {
 
-    var { id, update } = initial_vnode.attrs;
-    var { val, min, max } = inRange(initial_vnode);
-
-    function retip() {
-      return ((val - min) / (max - min) * 99);
-    }
-
-    var tip = retip();
-
-    return {
-      view: function (vnode) {
-        var output = m('div.c-glider-display',
-          m('span.c-glider-display-text', {
-            style: { left: `${tip}%` }
-          }, `${formatNumber(val)}`)
-        );
-        var input = m('input[type=range].c-slider-input', {
-          min: min, max: max, value: val,
-          oninput: function (e) {
-            val = Number(e.target.value);
-            tip = retip();
-            update(val);
-          }
-        });
-        return [
-          m('span.c-value',
-            m('input[type=number].c-input', {
-              id: id + '-input',
-              value: val, min: min, max: max,
-              oninput: function (e) {
-                // number = e.target.value;
-                val = getNumberFrom(e.target);
-                tip = retip();
-                update(val);
-              }
-            })
-          ),
-          m('div.c-full-slider._pt-x5r._pb', [output, input]),
-        ]
-      }
-    }
-  }
-
-  function Slider(initial_vnode) {
-
-    var { id, title, update, reverse } = initial_vnode.attrs;
-    var { val, min, max } = inRange(initial_vnode);
-
-    function decrement() { val = Math.max(min, val - 1); update(val); }
-    function increment() { val = Math.min(max, val + 1); update(val); }
-
-    return {
-      view: function (vnode) {
-        return m('table.c-input-table.c-slider', { id: id }, m('tr', [
-          // m('td.c-value-td', val),
-          m('td.c-input-td',
-            m('input[type=number].c-input', {
-              id: id + '-input',
-              value: val, min: min, max: max,
-              oninput: function (e) {
-                // number = e.target.value;
-                val = getNumberFrom(e.target);
-                update(val);
-              }
-            })
-          ),
-          m('td', m('button.c-sr-button', { onclick: decrement }, '-')),
-          m('td', m('button.c-sr-button', { onclick: increment }, '+')),
-          m('td.c-slider-td', m('input[type=range].c-slider-input', {
-            title: title, class: reverse ? 'c-reverse' : '',
-            min: min, max: max, value: reverse ? (max - val + min) : val,
-            oninput: function (e) {
-              val = Number(e.target.value);
-              if (reverse) { val = Number(e.target.max) - val + Number(e.target.min) }
-              update(val);
-            }
-          }))
-        ]))
-      }
-    }
-  }
-
-  function Count(initial_vnode) {
-
-    var { id, update } = initial_vnode.attrs;
-    var { val, min, max } = inRange(initial_vnode);
-
-    function decrement() { val = Math.max(min, val - 1); update(val); }
-    function increment() { val = Math.min(max, val + 1); update(val); }
-
-    return {
-      view: function (vnode) {
-        return m('table.c-input-table.c-count', { id: id }, m('tr', [
-          // m('td.c-value-td', val),
-          m('td.c-input-td',
-            m('input[type=number].c-input', {
-              id: id + '-input',
-              value: val, min: min, max: max,
-              oninput: function (e) {
-                // number = e.target.value;
-                val = getNumberFrom(e.target);
-                update(val);
-              }
-            })
-          ),
-          m('td', m('button.c-sr-button', { onclick: decrement }, '-')),
-          m('td', m('button.c-sr-button', { onclick: increment }, '+')),
-        ]));
-      }
-    }
-  }
-
-  // var Example = {
-  //   oninit: function(vnode) {
-  //     c.log('initialized');
-  //   },
-  //   oncreate: function(vnode) {
-  //     console.log('DOM created')
-  //   },
-  //   onbeforeupdate: function(newVnode, oldVnode) {
-  //     return true
-  //   },
-  //   onupdate: function(vnode) {
-  //     console.log('DOM updated')
-  //   },
-  //   onbeforeremove: function(vnode) {
-  //     console.log('exit animation can start')
-  //     return new Promise(function(resolve) {
-  //       // call after animation completes
-  //       resolve()
-  //     })
-  //   },
-  //   onremove: function(vnode) {
-  //     console.log('removing DOM element')
-  //   },
-  //   view: function (vnode) {
-  //     return m('div', 'Hello')
-  //   }
-  // }
-
-  var route = {}, routeStart = '/calculator';
-
-  route['/start'] = {
-    view: function (vnode) {
-      return cDisplay([
-        m('a._btnlink._small', { href: '#!/calculator', class:'primary-button' }, 'Open Calculator'), ' ',
-        m('a._btnlink._small', { href: '#!/test' }, 'Test'), ' ',
-        m('a._btnlink._small', { href: '#!/test2' }, 'Test 2'), ' ',
-        hr,
-        m('table._mono', [
-        ]),
-      ]);
-    }
-  };
-
-  var test_v = 1000;
-
-  route['/test'] = function Test(initial_vnode) {
-    return {
-      view: function (vnode) {
-        return cDisplay([
-          closeButton(),
-          div(b('Test')), hr,
-          m('table._mono', [
-            vd('',
-              m('input[type=number]', {
-                id: 'test_v-input',
-                value: test_v,
-                oninput: function (e) {
-                  // number = e.target.value;
-                  test_v = getNumberFrom(e.target);
-                }
-              })
-            ),
-            vd('test_v', formatNumber(test_v)),
-          ]),
-          hr,
-          blink({ href: '#!/start' }, 'Close'), ' ',
-        ])
-      }
-    }
-  };
-
-  var glider = 2000;
-  var slider = 10;
-  var slidex = 10;
-  var count = 100;
-  var number = 1001;
-
-  var TestValues = {
-    view: function (vnode) {
-      return m('table._mono', [
-        vd('Glider', formatNumber(glider)),
-        vd('Slider', formatNumber(slider)),
-        vd('Slidex', formatNumber(slidex)),
-        vd('Count', formatNumber(count)),
-        vd('Number', formatNumber(number)),
-        // vd('test_v', formatNumber(test_v)),
-      ]);
-    }
-  }
-
-  route['/test2'] = function Test2(initial_vnode) {
-    return {
-      view: function (vnode) {
-        return cDisplay([
-          closeButton(),
-          div(b('Test 2')), hr,
-          m('div.i_row', [
-            m('span.c-input-label', 'Glider'),
-            m(Glider, {
-              id: 'glider', min: 0, max: 10000, value: glider,
-              update: function (v) { glider = v; }
-            }),
-          ]),
-          m('div.i_row', [
-            m('span.c-input-label', 'Slider'),
-            m(Slider, {
-              id: 'slider', min: 0, max: 100, value: slider,
-              update: function (v) { slider = v; }
-            }),
-          ]),
-          m('div.i_row', [
-            m('span.c-input-label', 'Slidex'),
-            m(Slider, {
-              id: 'slidex', min: 0, max: 100, value: slidex, reverse: true,
-              update: function (v) { slidex = v; }
-            }),
-          ]),
-          m('div.i_row', [
-            m('span.c-input-label', 'Count'),
-            m(Count, {
-              id: 'count', min: 0, max: 200, value: count,
-              update: function (v) { count = v; }
-            }),
-          ]),
-          m('div.i_row', [
-            m('span.c-input-label', 'Number'),
-            m('table.c-input-table', { id: 'number' }, m('tr', [
-              // m('td.c-value-td', number),
-              m('td.c-input-td',
-                m('input[type=number].c-input', {
-                  id: 'number-input',
-                  value: number, min: 0, max: 99999,
-                  oninput: function (e) {
-                    // number = e.target.value;
-                    number = getNumberFrom(e.target);
-                  }
-                })
-              ),
-            ])),
-          ]),
-          hr,
-          m(TestValues),
-          hr,
-          blink({ href: '#!/start' }, 'Close'), ' ',
-        ])
-      }
-    }
-  }
-
-  var monthlyIncome = 3500;
-  var monthlyContribution = 120;
-  var coverage = 100000;
-  var age = 25;
-  var savings = 210000;
-
-  route['/calculator'] = function Calculator(initial_vnode) {
-
-    return {
-      onupdate: function (vnode) { m.redraw(); },
-      view: function () {
-        return [
-          cDisplay([
-            closeButton('Close Calculator'),
-            // m('h3._h6._no-margin', 'Takaful Calculator'), hr,
-            m('div#c-intro',
-              m('span', 'Takaful Calculator')
-            ),
-            // div('Coming soon ..'),
-
-            m('div.i_row', [
-              m('span.c-input-label', 'Monthly Income'),
-              m('table.c-input-table', { id: 'income' }, m('tr', [
-                // m('td.c-value-td', number),
-                m('td.c-input-td',
-                  m('input[type=number].c-input', {
-                    id: 'income-input',
-                    value: monthlyIncome, min: 0, max: 99999,
-                    oninput: function (e) {
-                      // monthlyIncome = e.target.value;
-                      monthlyIncome = getNumberFrom(e.target);
-                    }
-                  })
-                ),
-              ])),
-            ]),
-
-            m('div.i_row', [
-              m('span.c-input-label', 'Coverage'),
-              m(Glider, {
-                id: 'coverage', min: 50000, max: 900000, value: coverage,
-                update: function (v) { coverage = v; }
-              }),
-            ]),
-
-            m('div.i_row', [
-              m('span.c-input-label', 'Contribution'),
-              m(Slider, {
-                id: 'contribution', min: 0, max: 2000, value: monthlyContribution,
-                update: function (v) { monthlyContribution = v; }
-              }),
-            ]),
-
-            m('div.i_row', [
-              m('span.c-input-label', 'Age'),
-              m(Slider, {
-                id: 'age', min: 18, max: 90, value: age, reverse:true,
-                update: function (v) { age = v; }
-              }),
-            ]),
-
-            m('div.i_row', [
-              m('span.c-input-label', 'Savings'),
-              m('table.c-input-table', { id: 'savings' }, m('tr', [
-                // m('td.c-value-td', number),
-                m('td.c-input-td',
-                  m('input[type=number].c-input', {
-                    id: 'savings-input',
-                    value: savings, min: 0, max: 99999,
-                    oninput: function (e) {
-                      // savings = e.target.value;
-                      savings = getNumberFrom(e.target);
-                    }
-                  })
-                ),
-              ])),
-            ]),
-
-            hr,
-            blink({ href: '#!/start', class:'primary-button' }, 'Apply Now'), ' ',
-            blink({ href: '#!/start' }, 'Close'), ' ',
-          ]),
-        ]
-      }
+  function createFun(input) {
+    let [tag, sel] = [input, input];
+    if (Array.isArray(input)) { [tag, sel] = input; }
+    return fun[tag] = function (opt, content) {
+      if (arguments.length === 1) { content = opt; opt = {}; }
+      return m(sel, opt, content);
     };
   }
 
+  [
+    'div', 'table', 'tr', 'td', 'b',
+    ['cDisplay', 'div.c-display._pa._radius-x25r'],
+    ['blink', 'a._btnlink._smaller'],
+    ['irow', 'div.i_row'],
+    ['ilabel', 'span.c-input-label'],
+    ['itable', 'table.c-input-table'],
+    ['itd', 'td.c-input-td'],
+    ['vtd', 'td.c-value-td'],
+  ].forEach(createFun);
+
+  var
+    hr = m('hr'),
+    {
+      div, table, tr, td, b,
+      cDisplay, blink,
+      irow, ilabel, itable, itd,
+      vtd,
+    } = fun;
+
+  function vd(label, value) {
+    return tr([td(label), td(':'), td(value)])
+  }
+
+  function itext(opt, content) {
+    if (arguments.length === 1) { content = opt; opt = {}; }
+    return m('i._itext', m('i.itext', opt, content));
+  }
+
+  function closeButton(input, href = '#!/start') {
+    var opt = { href: href, title: 'Close' };
+    if (typeof input === 'string') { opt.title = input }
+    else if (typeof input === 'object') { opt = input }
+    return m('a.c-close._btnlink._small._no-pad._lh-0', opt, itext('×'))
+  }
+
+  function iSlider(val, key, opt) {
+    opt.value = val[key];
+    _oninput = opt.oninput;
+    opt.oninput = function (e) {
+      val[key] = Number(e.target.value);
+      if (typeof _oninput === 'function') { _oninput(e) }
+    };
+    var reverse_tag = opt.reverse ? '.c-reverse' : '';
+    return m('input[type=range].c-slider-input' + reverse_tag, opt)
+  }
+
+  function iNumber(val, key, opt) {
+    var { min, max } = opt;
+
+    if (max < min) { [min, max] = [max, min]; }
+
+    var v = val[key];
+    if (has(v)) { v = Math.max(min || -Infinity, Math.min(max || Infinity, v)); }
+    else { v = (has(min) ? min : has(max) ? max : 0); }
+
+    opt.value = val[key] = v;
+
+    _oninput = opt.oninput;
+    opt.oninput = function (e) {
+      val[key] = getNumberFrom(e.target);
+      if (typeof _oninput === 'function') { _oninput(e) }
+    };
+
+    return m('input[type=number].c-input', opt)
+  }
+
+  function Glider(val, key, opt) {
+
+    var { id, min, max, iclass, reverse } = opt;
+
+    var tip = ((val[key] - min) / (max - min) * 99);
+    var tips = reverse ? { right: `${tip}%` } : { left: `${tip}%` };
+
+    var output = m('div.c-glider-display',
+      m('span.c-glider-display-text',
+        { style: tips },
+        `${formatNumber(val[key])}`)
+    );
+
+    var inputSlider = iSlider(val, key, {
+      id: id + '-slider', min: min, max: max, reverse: reverse,
+    });
+
+    var inputNumber = iNumber(val, key, {
+      id: id + '-input', min: min, max: max, class: iclass,
+    });
+
+    return [
+      // m('pre._pre',`[ Glider: (${key}:${val[key]}) ]\n${JSON.stringify(opt)}`),
+      m('span.c-value', inputNumber),
+      m('div.c-glider._pt-x5r._pb', [
+        output,
+        inputSlider
+      ]),
+    ];
+  }
+
+  function initClicker(val, key, opt) {
+
+    var { min, max, reverse } = opt;
+
+    var decrement = function () { val[key] = Math.max(min, val[key] - 1); }
+    var increment = function () { val[key] = Math.min(max, val[key] + 1); }
+
+    if (reverse) { [decrement, increment] = [increment, decrement] }
+
+    var incrementButton = m('button.c-sr-button', { onclick: decrement }, '-');
+    var decrementButton = m('button.c-sr-button', { onclick: increment }, '+');
+
+    return { increment, decrement, incrementButton, decrementButton }
+
+  }
+
+  function Slider(val, key, opt) {
+
+    var { id, min, max, iclass, reverse } = opt;
+
+    var { increment, decrement, incrementButton, decrementButton } = initClicker(val, key, opt)
+
+    var inputNumber = iNumber(val, key, {
+      id: id + '-number', min: min, max: max, class: iclass,
+    });
+
+    var inputSlider = iSlider(val, key, {
+      id: id + '-slider', min: min, max: max, reverse: reverse,
+    });
+
+    return [
+      // m('pre._pre', `[ Slider: (${key}:${val[key]}) ]\n${JSON.stringify(opt)}`),
+      m('span.c-value', inputNumber),
+      itable({ id: id + '-table', class: 'c-slider' }, m('tr', [
+        m('td', incrementButton),
+        m('td', decrementButton),
+        m('td.c-slider-td', inputSlider),
+      ])) // itable
+    ];
+  }
+
+  function Counter(val, key, opt) {
+
+    var { id, min, max, iclass } = opt;
+
+    var { increment, decrement, incrementButton, decrementButton } = initClicker(val, key, opt)
+
+    var inputNumber = iNumber(val, key, {
+      id: id + '-number', min: min, max: max, class: iclass,
+    });
+
+    return [
+      // m('pre._pre', `[ Counter: (${key}:${val[key]}) ]\n${JSON.stringify(opt)}`),
+      m('span.c-value', inputNumber),
+      itable({ id: id + '-table', class: 'c-counter' }, m('tr', [
+        m('td', incrementButton),
+        m('td', decrementButton),
+      ])) // itable
+    ];
+
+  }
+
+  // function Sample(initial_vnode) {
+  //   return {
+  //     oninit: function (vnode) {
+  //       c.log('initialized');
+  //     },
+  //     oncreate: function (vnode) {
+  //       console.log('DOM created')
+  //     },
+  //     onbeforeupdate: function (newVnode, oldVnode) {
+  //       return true
+  //     },
+  //     onupdate: function (vnode) {
+  //       console.log('DOM updated')
+  //     },
+  //     onbeforeremove: function (vnode) {
+  //       console.log('exit animation can start')
+  //       return new Promise(function (resolve) {
+  //         // call after animation completes
+  //         resolve()
+  //       })
+  //     },
+  //     onremove: function (vnode) {
+  //       console.log('removing DOM element')
+  //     },
+  //     view: function (vnode) {
+  //       return m('div', 'Hello')
+  //     }
+  //   }
+  // }
+
+  // ===========================================================
+  // Start Page
   // ===========================================================
 
-  w.addEventListener('load', function () {
+  var
+    vars = {},
+    route = {};
+
+  route['/start'] = function Start(initial_vnode) {
+    var btn = createFun(['btn', 'a._btnlink._small']);
+    return {
+      view: function (vnode) {
+        return cDisplay([
+          btn({ href: '#!/calculator', class: 'primary-button' }, 'Open Calculator'), ' ',
+          hr,
+          btn({ href: '#!/test1' }, 'Test Glider'), ' ',
+          btn({ href: '#!/test2' }, 'Test Slider'), ' ',
+          btn({ href: '#!/test3' }, 'Test Counter'), ' ',
+          btn({ href: '#!/test4' }, 'Test Input'), ' ',
+          hr,
+          m('pre._pre', JSON.stringify(vars, null, 2)),
+        ]);
+      }
+    }
+  };
+
+  // ===========================================================
+  // Test Pages
+  // ===========================================================
+
+  vars.glider = 20;
+  vars.glidex = 20;
+
+  route['/test1'] = function TestGlider(initial_vnode) {
+    return {
+      view: function (vnode) {
+        return cDisplay([
+          closeButton(),
+          div(b('Test Glider')), hr,
+          irow([
+            ilabel('Glider'),
+            Glider(vars, 'glider', {
+              id: 'glider', min: 0, max: 100
+            }),
+          ]),
+          irow([
+            ilabel('Glidex'),
+            Glider(vars, 'glidex', {
+              id: 'glidex', min: 0, max: 100, reverse: true
+            }),
+          ]),
+          hr,
+          m('table._mono', [
+            vd('Glider', formatNumber(vars.glider)),
+            vd('Glidex', formatNumber(vars.glidex)),
+          ]),
+          hr,
+          blink({ href: '#!/start' }, 'Close'), ' ',
+        ])
+      }
+    }
+  }
+
+  vars.slider = 10;
+  vars.slidex = 10;
+
+  route['/test2'] = function TestSlider(initial_vnode) {
+    return {
+      view: function (vnode) {
+        return cDisplay([
+          closeButton(),
+          div(b('Test Slider')), hr,
+          irow([
+            ilabel('Slider'),
+            Slider(vars, 'slider', {
+              id: 'slider', min: 0, max: 100, iclass: 'c-w2',
+            }),
+          ]),
+          irow([
+            ilabel('Slidex'),
+            Slider(vars, 'slidex', {
+              id: 'slidex', min: 0, max: 100, iclass: 'c-w2', reverse: true,
+            }),
+          ]),
+          hr,
+          m('table._mono', [
+            vd('Slider', formatNumber(vars.slider)),
+            vd('Slidex', formatNumber(vars.slidex)),
+          ]),
+          hr,
+          blink({ href: '#!/start' }, 'Close'), ' ',
+        ])
+      }
+    }
+  }
+
+  vars.counter = 100;
+
+  route['/test3'] = function TestCounter(initial_vnode) {
+    return {
+      view: function (vnode) {
+        return cDisplay([
+          closeButton(),
+          div(b('Test Counter')), hr,
+          irow([
+            ilabel('Counter'),
+            Counter(vars, 'counter', {
+              id: 'counter', min: 0, max: 200, iclass: 'c-w2',
+            }),
+          ]),
+          hr,
+          m('table._mono', [
+            vd('Counter', formatNumber(vars.counter)),
+          ]),
+          hr,
+          blink({ href: '#!/start' }, 'Close'), ' ',
+        ])
+      }
+    }
+  }
+
+  vars.number = 2000000;
+  vars.nombor = 1000000000;
+
+  route['/test4'] = function TestInput(initial_vnode) {
+    return {
+      view: function (vnode) {
+        return cDisplay([
+          closeButton(),
+          div(b('Test Input')), hr,
+          irow([
+            ilabel('Number'),
+            iNumber(vars, 'number', {
+              id: 'number', class: 'c-w3', min: 0, max: 99999,
+            })
+          ]),
+          irow([
+            ilabel('Nombor'),
+            m('input[type=number]', {
+              id: 'nombor',
+              value: vars.nombor,
+              oninput: function (e) { vars.nombor = getNumberFrom(e.target); }
+            })
+          ]),
+          hr,
+          m('table._mono', [
+            vd('Number', formatNumber(vars.number)),
+            vd('Nombor', formatNumber(vars.nombor)),
+          ]),
+          hr,
+          blink({ href: '#!/start' }, 'Close'), ' ',
+        ])
+      }
+    }
+  };
+
+  // vars.keyX = value;
+  // 
+  // route['/testX'] = function TestX(initial_vnode) {
+  //   return {
+  //     view: function (vnode) {
+  //       return cDisplay([
+  //         closeButton(),
+  //         div(b('Test X')), hr,
+  //         hr,
+  //         m('table._mono', [
+  //           // vd('keyX', formatNumber(vars.keyX)),
+  //         ]),
+  //         hr,
+  //         blink({ href: '#!/start' }, 'Close'), ' ',
+  //       ])
+  //     }
+  //   }
+  // }
+
+  // ===========================================================
+  // Calculator Page
+  // ===========================================================
+  
+  route['/calculator'] = function Calculator(initial_vnode) {
+    var vars = {
+      monthlyIncome: 3500,
+      monthlyContribution: 120,
+      coverage: 570000,
+      age: 25,
+      savings: 210000
+    };
+    return {
+      view: function (vnode) {
+        return cDisplay([
+          closeButton('Close Calculator'),
+          m('div#c-intro', m('span', 'Takaful Calculator')),
+          // -----------------------------------------------
+          irow([
+            ilabel('Coverage'),
+            Glider(vars, 'coverage', {
+              id: 'coverage', min: 50000, max: 900000,
+            }),
+          ]),
+          // -----------------------------------------------
+          irow([
+            ilabel('Savings'),
+            Glider(vars, 'savings', {
+              id: 'savings', min: 0, max: 999000,
+            }),
+          ]),
+          // -----------------------------------------------
+          irow([
+            ilabel('Monthly Income'),
+            iNumber(vars, 'monthlyIncome', {
+              id: 'monthlyIncome', min: 0, max: 99999,
+            })
+          ]),
+          // -----------------------------------------------
+          irow([
+            ilabel('Monthly Contribution'),
+            Slider(vars, 'monthlyContribution', {
+              id: 'monthlyContribution', min: 0, max: 2000, iclass: 'c-w3',
+            }),
+          ]),
+          // -----------------------------------------------
+          irow([
+            ilabel('Age'),
+            Slider(vars, 'age', {
+              id: 'age', min: 18, max: 90, reverse: false, iclass: 'c-w3',
+            }),
+          ]),
+          // -----------------------------------------------
+          hr,
+          m('table._mono', [
+            // vd('keyX', formatNumber(vars.keyX)),
+          ]),
+          hr,
+          blink({ href: '#!/start', class: 'primary-button', title: 'Proceed to the next step' }, 'Submit Application'), ' ',
+          blink({ href: '#!/start', title: 'Cancel application' }, 'Cancel'), ' ',
+        ])
+      }
+    }
+  }
+
+  // ===========================================================
+  // Routing
+  // ===========================================================
+
+  var routeStart = '/start';
+
+  var _windowOnload = window.onload;
+
+  w.addEventListener('load', function (event) {
+
+    if (typeof _windowOnload === 'function') { _windowOnload(event); }
 
     log('The entire page is fully loaded, including all deferred scripts.');
     // log(calculator,load_calculator_to);
